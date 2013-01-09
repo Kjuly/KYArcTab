@@ -63,12 +63,13 @@ static CGSize tabBarSize_, itemSize_;
 }
 
 // Designated initializer
-- (id)initWithTabBarSize:(CGSize)tabBarSize
-                itemSize:(CGSize)itemSize
-               itemCount:(NSUInteger)itemCount
-                     tag:(NSInteger)tag
-                delegate:(NSObject<KYArcTabDelegate> *)tabBarDelegate {
-  if (self = [super init]) {
+- (id)initWithFrame:(CGRect)frame
+         tabBarSize:(CGSize)tabBarSize
+           itemSize:(CGSize)itemSize
+          itemCount:(NSUInteger)itemCount
+                tag:(NSInteger)tag
+           delegate:(NSObject<KYArcTabDelegate> *)tabBarDelegate {
+  if (self = [self initWithFrame:frame]) {
     tabBarSize_ = tabBarSize;
     itemSize_   = itemSize;
     
@@ -126,6 +127,14 @@ static CGSize tabBarSize_, itemSize_;
     currArcForArrow_       = M_PI + asinf((centerOriginY - newPositionForArrow_.y) / radius);
     self.previousItemIndex = 0;
     button = nil;
+  }
+  return self;
+}
+
+// Secondary initializer
+- (id)initWithFrame:(CGRect)frame {
+  if (self = [super initWithFrame:frame]) {
+    [self setFrame:frame];
   }
   return self;
 }

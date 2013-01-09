@@ -11,12 +11,14 @@
 #import "KYArcTab.h"
 
 @interface KYArcTabViewController : UIViewController <KYArcTabDelegate> {
-  NSArray * tabBarItems_;
-  CGRect    viewFrame_;
+  KYArcTab * tabBar_;
+  NSArray  * tabBarItems_;
+  CGRect     viewFrame_;
 }
 
-@property (nonatomic, copy)   NSArray * tabBarItems;
-@property (nonatomic, assign) CGRect    viewFrame;
+@property (nonatomic, retain) KYArcTab * tabBar;
+@property (nonatomic, copy)   NSArray  * tabBarItems;
+@property (nonatomic, assign) CGRect     viewFrame;
 
 - (id)initWithTabBarSize:(CGSize)tabBarSize itemSize:(CGSize)itemSize;
 

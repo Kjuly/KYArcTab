@@ -10,16 +10,13 @@
 
 @interface KYArcTabViewController () {
  @private
-  KYArcTab * tabBar_;
-  BOOL       isTabBarHide_;
-  BOOL       isSwiping_;       // doing swiping
-  CGFloat    swipeStartPoint_; // Value of the starting touch point's x location
+  BOOL    isTabBarHide_;    // mark for tab bar's visiablity
+  BOOL    isSwiping_;       // doing swiping
+  CGFloat swipeStartPoint_; // Value of the starting touch point's x location
 }
 
-@property (nonatomic, retain) KYArcTab * tabBar;
-
+// Release subviews
 - (void)_releaseSubviews;
-
 // Get the delta angle between previous item & current item
 - (CGFloat)_angleForRatationWithItemIndex:(NSUInteger)itemIndex
                         previousItemIndex:(NSUInteger)previousItemIndex;
@@ -33,9 +30,9 @@ static CGSize itemSize_;
 
 @implementation KYArcTabViewController
 
-@synthesize tabBarItems = tabBarItems_,
+@synthesize tabBar      = tabBar_,
+            tabBarItems = tabBarItems_,
             viewFrame   = viewFrame_;
-@synthesize tabBar      = tabBar_;
 
 - (void)dealloc {
   self.tabBarItems = nil;
@@ -89,12 +86,13 @@ static CGSize itemSize_;
   
   // Create a custom tab bar passing in the number of items,
   // the size of each item and setting ourself as the delegate
-  tabBar_ = [[KYArcTab alloc] initWithTabBarSize:tabBarSize_
-                                        itemSize:itemSize_
-                                       itemCount:self.tabBarItems.count
-                                             tag:0
-                                        delegate:self];
-  [tabBar_ setFrame:(CGRect){{(kKYArcTabViewWidth - tabBarSize_.width) / 2.f, CGRectGetHeight(self.viewFrame)}, tabBarSize_}];
+  CGRect tabBarFrame = (CGRect){{(kKYArcTabViewWidth - tabBarSize_.width) / 2.f, CGRectGetHeight(self.viewFrame)}, tabBarSize_};
+  tabBar_ = [[KYArcTab alloc] initWithFrame:tabBarFrame
+                                 tabBarSize:tabBarSize_
+                                   itemSize:itemSize_
+                                  itemCount:self.tabBarItems.count
+                                        tag:0
+                                   delegate:self];
   [self.view addSubview:tabBar_];
   
   // Select the first tab
