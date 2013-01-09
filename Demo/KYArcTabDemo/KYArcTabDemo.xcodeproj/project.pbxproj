@@ -43,11 +43,11 @@
 		7FA9126D169C4C3600767CCF /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FA9125B169C4C3600767CCF /* Icon-Small@2x.png */; };
 		7FA9126E169C4C3600767CCF /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FA9125C169C4C3600767CCF /* Icon.png */; };
 		7FA9126F169C4C3600767CCF /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FA9125D169C4C3600767CCF /* Icon@2x.png */; };
-		7FA91270169C4C3600767CCF /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 7FA9125E169C4C3600767CCF /* iTunesArtwork */; };
-		7FA91271169C4C3600767CCF /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = 7FA9125F169C4C3600767CCF /* iTunesArtwork@2x */; };
 		7FA91274169C4CA200767CCF /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA91273169C4CA200767CCF /* Constants.m */; };
 		7FA9127A169C4D7E00767CCF /* KYArcTab.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA91277169C4D7E00767CCF /* KYArcTab.m */; };
 		7FA9127B169C4D7E00767CCF /* KYArcTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA91279169C4D7E00767CCF /* KYArcTabViewController.m */; };
+		7FAA7F71169DBEEF00C4019B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 7FAA7F6F169DBEEE00C4019B /* iTunesArtwork */; };
+		7FAA7F72169DBEEF00C4019B /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = 7FAA7F70169DBEEE00C4019B /* iTunesArtwork@2x */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,14 +92,14 @@
 		7FA9125B169C4C3600767CCF /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
 		7FA9125C169C4C3600767CCF /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		7FA9125D169C4C3600767CCF /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
-		7FA9125E169C4C3600767CCF /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
-		7FA9125F169C4C3600767CCF /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
 		7FA91272169C4CA200767CCF /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		7FA91273169C4CA200767CCF /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		7FA91276169C4D7E00767CCF /* KYArcTab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYArcTab.h; sourceTree = "<group>"; };
 		7FA91277169C4D7E00767CCF /* KYArcTab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYArcTab.m; sourceTree = "<group>"; };
 		7FA91278169C4D7E00767CCF /* KYArcTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYArcTabViewController.h; sourceTree = "<group>"; };
 		7FA91279169C4D7E00767CCF /* KYArcTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYArcTabViewController.m; sourceTree = "<group>"; };
+		7FAA7F6F169DBEEE00C4019B /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
+		7FAA7F70169DBEEE00C4019B /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,8 +219,8 @@
 				7FA9125B169C4C3600767CCF /* Icon-Small@2x.png */,
 				7FA9125C169C4C3600767CCF /* Icon.png */,
 				7FA9125D169C4C3600767CCF /* Icon@2x.png */,
-				7FA9125E169C4C3600767CCF /* iTunesArtwork */,
-				7FA9125F169C4C3600767CCF /* iTunesArtwork@2x */,
+				7FAA7F6F169DBEEE00C4019B /* iTunesArtwork */,
+				7FAA7F70169DBEEE00C4019B /* iTunesArtwork@2x */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -305,8 +305,6 @@
 				7FA9126D169C4C3600767CCF /* Icon-Small@2x.png in Resources */,
 				7FA9126E169C4C3600767CCF /* Icon.png in Resources */,
 				7FA9126F169C4C3600767CCF /* Icon@2x.png in Resources */,
-				7FA91270169C4C3600767CCF /* iTunesArtwork in Resources */,
-				7FA91271169C4C3600767CCF /* iTunesArtwork@2x in Resources */,
 				7F76C709169D923300298814 /* KYITabBarArrow.png in Resources */,
 				7F76C70A169D923300298814 /* KYITabBarArrow@2x.png in Resources */,
 				7F76C70B169D923300298814 /* KYITabBarBackground.png in Resources */,
@@ -319,6 +317,8 @@
 				7F76C714169D923300298814 /* KYTabBarItem03@2x.png in Resources */,
 				7F76C715169D923300298814 /* KYTabBarItem04.png in Resources */,
 				7F76C716169D923300298814 /* KYTabBarItem04@2x.png in Resources */,
+				7FAA7F71169DBEEF00C4019B /* iTunesArtwork in Resources */,
+				7FAA7F72169DBEEF00C4019B /* iTunesArtwork@2x in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
