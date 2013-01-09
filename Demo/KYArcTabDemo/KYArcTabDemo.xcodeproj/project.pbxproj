@@ -21,6 +21,8 @@
 		7F76C714169D923300298814 /* KYTabBarItem03@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F76C704169D923300298814 /* KYTabBarItem03@2x.png */; };
 		7F76C715169D923300298814 /* KYTabBarItem04.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F76C705169D923300298814 /* KYTabBarItem04.png */; };
 		7F76C716169D923300298814 /* KYTabBarItem04@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F76C706169D923300298814 /* KYTabBarItem04@2x.png */; };
+		7F983C28169DEE6000F1DCD6 /* KYIArcTabGestureHelp.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F983C26169DEE6000F1DCD6 /* KYIArcTabGestureHelp.png */; };
+		7F983C29169DEE6000F1DCD6 /* KYIArcTabGestureHelp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F983C27169DEE6000F1DCD6 /* KYIArcTabGestureHelp@2x.png */; };
 		7FA91229169C473600767CCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FA91228169C473600767CCF /* UIKit.framework */; };
 		7FA9122B169C473600767CCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FA9122A169C473600767CCF /* Foundation.framework */; };
 		7FA9122D169C473600767CCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FA9122C169C473600767CCF /* CoreGraphics.framework */; };
@@ -66,6 +68,8 @@
 		7F76C704169D923300298814 /* KYTabBarItem03@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "KYTabBarItem03@2x.png"; sourceTree = "<group>"; };
 		7F76C705169D923300298814 /* KYTabBarItem04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = KYTabBarItem04.png; sourceTree = "<group>"; };
 		7F76C706169D923300298814 /* KYTabBarItem04@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "KYTabBarItem04@2x.png"; sourceTree = "<group>"; };
+		7F983C26169DEE6000F1DCD6 /* KYIArcTabGestureHelp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = KYIArcTabGestureHelp.png; sourceTree = "<group>"; };
+		7F983C27169DEE6000F1DCD6 /* KYIArcTabGestureHelp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "KYIArcTabGestureHelp@2x.png"; sourceTree = "<group>"; };
 		7FA91225169C473600767CCF /* KYArcTabDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KYArcTabDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FA91228169C473600767CCF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7FA9122A169C473600767CCF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -120,6 +124,8 @@
 		7F76C6F8169D923300298814 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				7F983C26169DEE6000F1DCD6 /* KYIArcTabGestureHelp.png */,
+				7F983C27169DEE6000F1DCD6 /* KYIArcTabGestureHelp@2x.png */,
 				7F76C6FB169D923300298814 /* KYITabBarBackground.png */,
 				7F76C6FC169D923300298814 /* KYITabBarBackground@2x.png */,
 				7F76C6F9169D923300298814 /* KYITabBarArrow.png */,
@@ -319,6 +325,8 @@
 				7F76C716169D923300298814 /* KYTabBarItem04@2x.png in Resources */,
 				7FAA7F71169DBEEF00C4019B /* iTunesArtwork in Resources */,
 				7FAA7F72169DBEEF00C4019B /* iTunesArtwork@2x in Resources */,
+				7F983C28169DEE6000F1DCD6 /* KYIArcTabGestureHelp.png in Resources */,
+				7F983C29169DEE6000F1DCD6 /* KYIArcTabGestureHelp@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

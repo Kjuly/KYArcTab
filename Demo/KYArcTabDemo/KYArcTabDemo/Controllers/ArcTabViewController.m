@@ -67,7 +67,7 @@
   [viewControllerFour_.view  setFrame:childViewFrame];
   
   // Set child views' background color
-  [viewControllerOne_.view   setBackgroundColor:[UIColor lightGrayColor]];
+  [viewControllerOne_.view   setBackgroundColor:[UIColor blackColor]];
   [viewControllerTwo_.view   setBackgroundColor:[UIColor redColor]];
   [viewControllerThree_.view setBackgroundColor:[UIColor greenColor]];
   [viewControllerFour_.view  setBackgroundColor:[UIColor blueColor]];
@@ -81,6 +81,18 @@
                          @"viewController" : viewControllerThree_},
                        @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 4],
                          @"viewController" : viewControllerFour_}];
+  
+  // Add a gesture signal on the first view
+  UIImage * gestureImage = [UIImage imageNamed:kKYIArcTabGestureHelp];
+  CGRect gestureImageViewFrame =
+    (CGRect){{(kKYViewWidth - gestureImage.size.width) / 2.f,
+              (kKYViewHeight - kKYTabBarHeight - gestureImage.size.height) / 2.f},
+             gestureImage.size};
+  UIImageView * gestureImageView = [[UIImageView alloc] initWithFrame:gestureImageViewFrame];
+  [gestureImageView setImage:gestureImage];
+  [gestureImageView setUserInteractionEnabled:YES];
+  [viewControllerOne_.view addSubview:gestureImageView];
+  [gestureImageView release];
 }
 
 @end

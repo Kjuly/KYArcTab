@@ -27,11 +27,12 @@
 #define kKYTabBarItemHeight 44.f
 #define kKYTabBarItemWidth  44.f
 
-//#define kPMINBackgroundBlack       @"MainViewBackgroundBlack.png"
-// TAB BAR
+// Tab Bar
 #define kKYITabBarBackground          @"KYITabBarBackground.png"
 #define kKYITabBarArrow               @"KYITabBarArrow.png"
 #define kKYITabBarItemImageNameFormat @"KYTabBarItem%.2d.png"
+// Gesture
+#define kKYIArcTabGestureHelp @"KYIArcTabGestureHelp.png"
 
 @interface Constants : NSObject
 
