@@ -29,14 +29,9 @@
 
 //#define kPMINBackgroundBlack       @"MainViewBackgroundBlack.png"
 // TAB BAR
-#define kPMINTabBarBackground          @"TabBarBackground.png"
-#define kPMINTabBarArrow               @"TabBarArrow.png"
-#define kPMINTabBarItemPMDetailInfo    @"TabBarItemPMDetailInfo.png"
-#define kPMINTabBarItemPMDetailArea    @"TabBarItemPMDetailArea.png"
-#define kPMINTabBarItemPMDetailSize    @"TabBarItemPMDetailSize.png"
-#define kPMINTabBarItem6PMsDetailMemo  @"TabBarItemPMDetailMemo.png"
-#define kPMINTabBarItem6PMsDetailSkill @"TabBarItemPMDetailSkill.png"
-#define kPMINTabBarItem6PMsDetailMove  @"TabBarItemPMDetailMove.png"
+#define kKYITabBarBackground          @"KYITabBarBackground.png"
+#define kKYITabBarArrow               @"KYITabBarArrow.png"
+#define kKYITabBarItemImageNameFormat @"KYTabBarItem%.2d.png"
 
 @interface Constants : NSObject
 

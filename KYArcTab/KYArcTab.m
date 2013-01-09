@@ -82,7 +82,7 @@ static CGSize tabBarSize_, itemSize_;
     delegate_ = tabBarDelegate;
     
     // Set background
-    [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:kPMINTabBarBackground]]];
+    [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:kKYITabBarBackground]]];
     [self setOpaque:NO];
     
     CGFloat menuAreaHeight = tabBarSize_.height - itemSize_.height / 2.f - 8.f;
@@ -118,7 +118,7 @@ static CGSize tabBarSize_, itemSize_;
     [self _setFrameForButtonsBasedOnItemCount];
     
     // Top Circle Arrow
-    arrow_ = [[UIImageView alloc] initWithImage:[UIImage imageNamed:kPMINTabBarArrow]];
+    arrow_ = [[UIImageView alloc] initWithImage:[UIImage imageNamed:kKYITabBarArrow]];
     UIButton * button = [buttons_ objectAtIndex:0];
     [arrow_ setFrame:button.frame];
     [self.menuArea addSubview:arrow_];
@@ -234,7 +234,7 @@ static CGSize tabBarSize_, itemSize_;
 
 // Add arrow for tab bar at index of the item offered
 - (void)_addTabBarArrowAtIndex:(NSUInteger)itemIndex {
-  UIImageView * tabBarArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:kPMINTabBarArrow]];
+  UIImageView * tabBarArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:kKYITabBarArrow]];
   [tabBarArrow setTag:kKYNArcTabArrowTag];
   [tabBarArrow setFrame:(CGRect){{[self _horizontalLocationFor:itemIndex] - itemSize_.width / 2.f, 0.f}, tabBarArrow.frame.size}];
   [self insertSubview:tabBarArrow atIndex:1];

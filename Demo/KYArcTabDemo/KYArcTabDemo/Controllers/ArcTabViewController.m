@@ -66,13 +66,13 @@
     [viewControllerFour_.view  setBackgroundColor:[UIColor blueColor]];
     
     // Add child views as tab bar items
-    self.tabBarItems = @[@{@"image"          : kPMINTabBarItemPMDetailInfo,
+    self.tabBarItems = @[@{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 1],
                            @"viewController" : viewControllerOne_},
-                         @{@"image"          : kPMINTabBarItem6PMsDetailMemo,
+                         @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 2],
                            @"viewController" : viewControllerTwo_},
-                         @{@"image"          : kPMINTabBarItem6PMsDetailSkill,
+                         @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 3],
                            @"viewController" : viewControllerThree_},
-                         @{@"image"          : kPMINTabBarItem6PMsDetailMove,
+                         @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 4],
                            @"viewController" : viewControllerFour_}];
   }
   return self;
