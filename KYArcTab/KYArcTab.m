@@ -29,10 +29,6 @@
 
 // Only selected the pressed item, and highlight it
 - (void)_dimAllButtonsExcept:(UIButton *)selectedButton;
-// Get position.x of the selected tab
-- (CGFloat)_horizontalLocationFor:(NSUInteger)tabIndex;
-// Add arrow for tab bar at index of the item offered
-- (void)_addTabBarArrowAtIndex:(NSUInteger)itemIndex;
 // Set buttons' layout for different number of the button count
 - (void)_setFrameForButtonsBasedOnItemCount;
 // Set frame for button with special tag
@@ -210,35 +206,6 @@ static CGSize tabBarSize_, itemSize_;
       [button setTag:0];
     }
   }
-}
-
-// Get position.x of the selected tab
-- (CGFloat)_horizontalLocationFor:(NSUInteger)tabIndex {
-  UIImageView * tabBarArrow = (UIImageView *)[self viewWithTag:kKYNArcTabArrowTag];
-  
-  // A single tab item's width is the same as the button's width
-  UIButton * button = [buttons_ objectAtIndex:tabIndex];
-  CGFloat tabItemWidth = button.frame.size.width;
-  
-  // A half width is tabItemWidth divided by 2 minus half the width of the arrow
-  CGFloat halfTabItemWidth = (tabItemWidth / 2) - (tabBarArrow.frame.size.width / 2);
-  
-  // The horizontal location is the index times the width plus a half width
-  //
-  //    __^__
-  //   |     |
-  //    -----
-  //
-  return CGRectGetMinX(button.frame) + halfTabItemWidth;
-}
-
-// Add arrow for tab bar at index of the item offered
-- (void)_addTabBarArrowAtIndex:(NSUInteger)itemIndex {
-  UIImageView * tabBarArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:kKYITabBarArrow]];
-  [tabBarArrow setTag:kKYNArcTabArrowTag];
-  [tabBarArrow setFrame:(CGRect){{[self _horizontalLocationFor:itemIndex] - itemSize_.width / 2.f, 0.f}, tabBarArrow.frame.size}];
-  [self insertSubview:tabBarArrow atIndex:1];
-  [tabBarArrow release];
 }
 
 // Set buttons' layout for different number of the button count
