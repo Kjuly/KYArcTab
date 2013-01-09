@@ -39,50 +39,48 @@
   [super dealloc];
 }
 
-- (id)init {
-  if (self = [super init]) {
-    [self setTitle:@"KYArcTab"];
-    
-    // Set View Frame
-    self.viewFrame = (CGRect){CGPointZero, {kKYViewWidth, kKYViewHeight}};
-    
-    // Add child view controllers to each tab
-    viewControllerOne_   = [[UIViewController alloc] init];
-    viewControllerTwo_   = [[UIViewController alloc] init];
-    viewControllerThree_ = [[UIViewController alloc] init];
-    viewControllerFour_  = [[UIViewController alloc] init];
-    
-    // Set child views' Frame
-    CGRect childViewFrame = self.viewFrame;
-    [viewControllerOne_.view   setFrame:childViewFrame];
-    [viewControllerTwo_.view   setFrame:childViewFrame];
-    [viewControllerThree_.view setFrame:childViewFrame];
-    [viewControllerFour_.view  setFrame:childViewFrame];
-    
-    // Set child views' background color
-    [viewControllerOne_.view   setBackgroundColor:[UIColor grayColor]];
-    [viewControllerTwo_.view   setBackgroundColor:[UIColor redColor]];
-    [viewControllerThree_.view setBackgroundColor:[UIColor greenColor]];
-    [viewControllerFour_.view  setBackgroundColor:[UIColor blueColor]];
-    
-    // Add child views as tab bar items
-    self.tabBarItems = @[@{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 1],
-                           @"viewController" : viewControllerOne_},
-                         @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 2],
-                           @"viewController" : viewControllerTwo_},
-                         @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 3],
-                           @"viewController" : viewControllerThree_},
-                         @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 4],
-                           @"viewController" : viewControllerFour_}];
-  }
-  return self;
-}
-
 - (void)didReceiveMemoryWarning {
   // Releases the view if it doesn't have a superview.
   [super didReceiveMemoryWarning];
   
   // Release any cached data, images, etc that aren't in use.
+}
+
+#pragma mark - Override
+
+// Override |KYArcTabViewController|'s |-setup|
+- (void)setup {
+  // Set View Frame
+  self.viewFrame = (CGRect){CGPointZero, {kKYViewWidth, kKYViewHeight}};
+  
+  // Add child view controllers to each tab
+  viewControllerOne_   = [[UIViewController alloc] init];
+  viewControllerTwo_   = [[UIViewController alloc] init];
+  viewControllerThree_ = [[UIViewController alloc] init];
+  viewControllerFour_  = [[UIViewController alloc] init];
+  
+  // Set child views' Frame
+  CGRect childViewFrame = self.viewFrame;
+  [viewControllerOne_.view   setFrame:childViewFrame];
+  [viewControllerTwo_.view   setFrame:childViewFrame];
+  [viewControllerThree_.view setFrame:childViewFrame];
+  [viewControllerFour_.view  setFrame:childViewFrame];
+  
+  // Set child views' background color
+  [viewControllerOne_.view   setBackgroundColor:[UIColor lightGrayColor]];
+  [viewControllerTwo_.view   setBackgroundColor:[UIColor redColor]];
+  [viewControllerThree_.view setBackgroundColor:[UIColor greenColor]];
+  [viewControllerFour_.view  setBackgroundColor:[UIColor blueColor]];
+  
+  // Add child views as tab bar items
+  self.tabBarItems = @[@{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 1],
+                         @"viewController" : viewControllerOne_},
+                       @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 2],
+                         @"viewController" : viewControllerTwo_},
+                       @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 3],
+                         @"viewController" : viewControllerThree_},
+                       @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 4],
+                         @"viewController" : viewControllerFour_}];
 }
 
 @end

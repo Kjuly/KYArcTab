@@ -50,12 +50,14 @@
 @property (nonatomic, assign) NSInteger                     previousItemIndex;
 
 // Designated initializer
-- (id)initWithFrame:(CGRect)frame         // frame of tab bar
-         tabBarSize:(CGSize)tabBarSize    // size of tab bar
-           itemSize:(CGSize)itemSize      // size of items on tab bar
-          itemCount:(NSUInteger)itemCount // number of items on tab bar
-                tag:(NSInteger)tag        // tag for the tab bar
-           delegate:(NSObject <KYArcTabDelegate> *)tabBarDelegate;
+- (id)initWithFrame:(CGRect)frame              // frame of tab bar
+         tabBarSize:(CGSize)tabBarSize         // size of tab bar
+    backgroundColor:(UIColor *)backgroundColor // background color of tab bar
+           itemSize:(CGSize)itemSize           // size of items on tab bar
+          itemCount:(NSUInteger)itemCount      // number of items on tab bar
+              arrow:(UIImage *)arrow           // arrow on the tab bar
+                tag:(NSInteger)tag             // tag for the tab bar
+           delegate:(NSObject <KYArcTabDelegate> *)delegate;
 // Action of touch down on tab bar item
 - (void)touchDownAction:(UIButton *)button;
 // Action for selected item

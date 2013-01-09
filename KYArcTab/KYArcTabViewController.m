@@ -24,8 +24,7 @@
 @end
 
 
-static CGSize tabBarSize_;
-static CGSize itemSize_;
+static CGSize tabBarSize_; // size of tab bar
 
 
 @implementation KYArcTabViewController
@@ -47,19 +46,33 @@ static CGSize itemSize_;
 }
 
 // Designated initializer
-- (id)initWithTabBarSize:(CGSize)tabBarSize
-                itemSize:(CGSize)itemSize {
+- (id)  initWithTitle:(NSString *)title
+           tabBarSize:(CGSize)tabBarSize
+tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
+             itemSize:(CGSize)itemSize
+                arrow:(UIImage *)arrow {
   if (self = [self init]) {
+    // Set title if |title| is not nil
+    if (title) [self setTitle:title];
+    
+    // Tab bar size
     tabBarSize_ = tabBarSize;
-    itemSize_   = itemSize;
-  }
-  return self;
-}
-
-// Secondary initializer
-- (id)init {
-  self = [super init];
-  if (self) {
+    
+    // Custom setup jobs
+    [self setup];
+    
+    // Create a custom tab bar passing in the number of items
+    CGRect tabBarFrame =
+      (CGRect){{(kKYArcTabViewWidth - tabBarSize_.width) / 2.f, CGRectGetHeight(self.viewFrame)}, tabBarSize_};
+    // Generate tab bar
+    tabBar_ = [[KYArcTab alloc] initWithFrame:tabBarFrame
+                                   tabBarSize:tabBarSize
+                              backgroundColor:tabBarBackgroundColor
+                                     itemSize:itemSize
+                                    itemCount:self.tabBarItems.count
+                                        arrow:arrow
+                                          tag:0
+                                     delegate:self];
   }
   return self;
 }
@@ -84,15 +97,7 @@ static CGSize itemSize_;
 - (void)viewDidLoad {
   [super viewDidLoad];
   
-  // Create a custom tab bar passing in the number of items,
-  // the size of each item and setting ourself as the delegate
-  CGRect tabBarFrame = (CGRect){{(kKYArcTabViewWidth - tabBarSize_.width) / 2.f, CGRectGetHeight(self.viewFrame)}, tabBarSize_};
-  tabBar_ = [[KYArcTab alloc] initWithFrame:tabBarFrame
-                                 tabBarSize:tabBarSize_
-                                   itemSize:itemSize_
-                                  itemCount:self.tabBarItems.count
-                                        tag:0
-                                   delegate:self];
+  // Add tab bar
   [self.view addSubview:tabBar_];
   
   // Select the first tab
@@ -263,6 +268,9 @@ static CGSize itemSize_;
 }
 
 #pragma mark - Public Methods
+
+// Setup message, override it to do customize jobs
+- (void)setup {}
 
 // Toggle tab bar when receive the right notification
 - (void)toggleTabBar:(NSNotification *)notification {

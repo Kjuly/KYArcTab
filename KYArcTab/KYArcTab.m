@@ -65,22 +65,21 @@ static CGSize tabBarSize_, itemSize_;
 // Designated initializer
 - (id)initWithFrame:(CGRect)frame
          tabBarSize:(CGSize)tabBarSize
+    backgroundColor:(UIColor *)backgroundColor
            itemSize:(CGSize)itemSize
           itemCount:(NSUInteger)itemCount
+              arrow:(UIImage *)arrow
                 tag:(NSInteger)tag
-           delegate:(NSObject<KYArcTabDelegate> *)tabBarDelegate {
+           delegate:(NSObject<KYArcTabDelegate> *)delegate {
   if (self = [self initWithFrame:frame]) {
+    // Background color
+    if (backgroundColor) [self setBackgroundColor:backgroundColor];
+    
     tabBarSize_ = tabBarSize;
     itemSize_   = itemSize;
-    
+    delegate_   = delegate;
     // The tag allows callers with multiple controls to distinguish between them
     [self setTag:tag];
-    
-    delegate_ = tabBarDelegate;
-    
-    // Set background
-    [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:kKYITabBarBackground]]];
-    [self setOpaque:NO];
     
     CGFloat menuAreaHeight = tabBarSize_.height - itemSize_.height / 2.f - 8.f;
     menuArea_ = [UIView alloc];
@@ -115,7 +114,7 @@ static CGSize tabBarSize_, itemSize_;
     [self _setFrameForButtonsBasedOnItemCount];
     
     // Top Circle Arrow
-    arrow_ = [[UIImageView alloc] initWithImage:[UIImage imageNamed:kKYITabBarArrow]];
+    arrow_ = [[UIImageView alloc] initWithImage:arrow];
     UIButton * button = [buttons_ objectAtIndex:0];
     [arrow_ setFrame:button.frame];
     [self.menuArea addSubview:arrow_];
@@ -135,6 +134,7 @@ static CGSize tabBarSize_, itemSize_;
 - (id)initWithFrame:(CGRect)frame {
   if (self = [super initWithFrame:frame]) {
     [self setFrame:frame];
+    [self setOpaque:NO];
   }
   return self;
 }

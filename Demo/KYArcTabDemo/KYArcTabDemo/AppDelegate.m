@@ -24,8 +24,11 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   
   // Setup root view controller
   ArcTabViewController * arcTabViewController = [ArcTabViewController alloc];
-  [arcTabViewController initWithTabBarSize:(CGSize){kKYTabBarWdith, kKYTabBarHeight}
-                                  itemSize:(CGSize){kKYTabBarItemWidth, kKYTabBarItemHeight}];
+  [arcTabViewController initWithTitle:@"KYArcTab"
+                           tabBarSize:(CGSize){kKYTabBarWdith, kKYTabBarHeight}
+                tabBarBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:kKYITabBarBackground]]
+                             itemSize:(CGSize){kKYTabBarItemWidth, kKYTabBarItemHeight}
+                                arrow:[UIImage imageNamed:kKYITabBarArrow]];
   [self.window setRootViewController:arcTabViewController];
   [arcTabViewController release];
   
