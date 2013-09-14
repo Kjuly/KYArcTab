@@ -79,7 +79,7 @@ static CGSize tabBarSize_, itemSize_;
     
     CGFloat menuAreaHeight = tabBarSize_.height - itemSize_.height / 2.f - 8.f;
     menuArea_ = [UIView alloc];
-    [menuArea_ initWithFrame:(CGRect){{0.f, tabBarSize_.height - menuAreaHeight}, tabBarSize_}];
+    (void)[menuArea_ initWithFrame:(CGRect){{0.f, tabBarSize_.height - menuAreaHeight}, tabBarSize_}];
     [self addSubview:menuArea_];
     
     // Initalize the array to store buttons
