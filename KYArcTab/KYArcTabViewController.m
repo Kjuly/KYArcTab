@@ -34,11 +34,9 @@ static CGSize tabBarSize_; // size of tab bar
             viewFrame   = viewFrame_;
 
 - (void)dealloc {
-  self.tabBarItems = nil;
   // Release subviews & remove notification observer
   [self _releaseSubviews];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:kKYNArcTabToggleTabBar object:nil];
-  [super dealloc];
 }
 
 - (void)_releaseSubviews {
@@ -90,7 +88,6 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
 - (void)loadView {
   UIView * view = [[UIView alloc] initWithFrame:self.viewFrame];
   self.view = view;
-  [view release];
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.

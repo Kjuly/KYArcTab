@@ -40,13 +40,13 @@
 
 
 @interface KYArcTab : UIView {
-  NSObject <KYArcTabDelegate> * delegate_;
+  NSObject <KYArcTabDelegate> * __weak delegate_;
   NSMutableArray              * buttons_;
   NSInteger                     previousItemIndex_;
 }
 
-@property (nonatomic, assign) NSObject <KYArcTabDelegate> * delegate;
-@property (nonatomic, retain) NSMutableArray              * buttons;
+@property (nonatomic, weak) NSObject <KYArcTabDelegate> * delegate;
+@property (nonatomic, strong) NSMutableArray              * buttons;
 @property (nonatomic, assign) NSInteger                     previousItemIndex;
 
 // Designated initializer

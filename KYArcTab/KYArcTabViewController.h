@@ -16,7 +16,7 @@
   CGRect     viewFrame_;
 }
 
-@property (nonatomic, retain) KYArcTab * tabBar;
+@property (nonatomic, strong) KYArcTab * tabBar;
 @property (nonatomic, copy)   NSArray  * tabBarItems;
 @property (nonatomic, assign) CGRect     viewFrame;
 

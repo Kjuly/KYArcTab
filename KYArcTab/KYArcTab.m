@@ -18,8 +18,8 @@
   CGFloat currArcForArrow_;
 }
 
-@property (nonatomic, retain) UIView      * menuArea;
-@property (nonatomic, retain) UIImageView * arrow;
+@property (nonatomic, strong) UIView      * menuArea;
+@property (nonatomic, strong) UIImageView * arrow;
 
 // Button actions except for the |-touchDownAction:|
 // Action of touch up inside tab bar item
@@ -56,10 +56,6 @@ static CGSize tabBarSize_, itemSize_;
 
 - (void)dealloc {
   self.delegate = nil;
-  self.buttons  = nil;
-  self.menuArea = nil;
-  self.arrow    = nil;
-  [super dealloc];
 }
 
 // Designated initializer
