@@ -22,22 +22,23 @@
 @property (nonatomic, strong) UIImageView * arrow;
 
 // Button actions except for the |-touchDownAction:|
-// Action of touch up inside tab bar item
+/*! Action of touch up inside tab bar item. */
 - (void)_touchUpInsideAction:(UIButton *)button;
-// Action of other touches on tab bar item
+/*! Action of other touches on tab bar item. */
 - (void)_otherTouchesAction:(UIButton*)button;
 
-// Only selected the pressed item, and highlight it
+/*! Only selected the pressed item, and highlight it. */
 - (void)_dimAllButtonsExcept:(UIButton *)selectedButton;
-// Set buttons' layout for different number of the button count
+/*! Set buttons' layout for different number of the button count. */
 - (void)_setFrameForButtonsBasedOnItemCount;
-// Set frame for button with special tag
+/*! Set frame for button with special tag. */
 - (void)_setButtonWithTag:(NSInteger)buttonTag origin:(CGPoint)origin;
 
 // Animation Control methods
 //- (void)pauseLayer:(CALayer *)layer;
 //- (void)resumeLayer:(CALayer *)layer;
-// Update arrow's position
+
+/*! Update arrow's position. */
 - (void)_moveArrowToNewPosition;
 
 @end

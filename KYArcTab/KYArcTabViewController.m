@@ -15,7 +15,13 @@
   CGFloat swipeStartPoint_; // Value of the starting touch point's x location
 }
 
-// Get the delta angle between previous item & current item
+/*! Get the delta angle between previous item & current item.
+ *
+ * \param itemIndex The index for target item
+ * \param previousItemIndex The index for previous selected item
+ *
+ * \returns Delta angel value
+ */
 - (CGFloat)_angleForRatationWithItemIndex:(NSUInteger)itemIndex
                         previousItemIndex:(NSUInteger)previousItemIndex;
 
@@ -34,7 +40,9 @@ static CGSize tabBarSize_; // size of tab bar
 - (void)dealloc
 {
   // Remove notification observer
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:kKYNArcTabToggleTabBar object:nil];
+  [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                  name:kKYNArcTabToggleTabBar
+                                                object:nil];
 }
 
 // Designated initializer
