@@ -15,8 +15,6 @@
   CGFloat swipeStartPoint_; // Value of the starting touch point's x location
 }
 
-// Release subviews
-- (void)_releaseSubviews;
 // Get the delta angle between previous item & current item
 - (CGFloat)_angleForRatationWithItemIndex:(NSUInteger)itemIndex
                         previousItemIndex:(NSUInteger)previousItemIndex;
@@ -33,14 +31,10 @@ static CGSize tabBarSize_; // size of tab bar
             tabBarItems = tabBarItems_,
             viewFrame   = viewFrame_;
 
-- (void)dealloc {
-  // Release subviews & remove notification observer
-  [self _releaseSubviews];
+- (void)dealloc
+{
+  // Remove notification observer
   [[NSNotificationCenter defaultCenter] removeObserver:self name:kKYNArcTabToggleTabBar object:nil];
-}
-
-- (void)_releaseSubviews {
-  self.tabBar = nil;
 }
 
 // Designated initializer
@@ -48,7 +42,8 @@ static CGSize tabBarSize_; // size of tab bar
            tabBarSize:(CGSize)tabBarSize
 tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
              itemSize:(CGSize)itemSize
-                arrow:(UIImage *)arrow {
+                arrow:(UIImage *)arrow
+{
   if (self = [self init]) {
     // Set title if |title| is not nil
     if (title) [self setTitle:title];
@@ -61,7 +56,8 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
     
     // Create a custom tab bar passing in the number of items
     CGRect tabBarFrame =
-      (CGRect){{(kKYArcTabViewWidth - tabBarSize_.width) / 2.f, CGRectGetHeight(self.viewFrame)}, tabBarSize_};
+      (CGRect){{(kKYArcTabViewWidth - tabBarSize_.width) * .5f,
+               CGRectGetHeight(self.viewFrame)}, tabBarSize_};
     // Generate tab bar
     tabBar_ = [[KYArcTab alloc] initWithFrame:tabBarFrame
                                    tabBarSize:tabBarSize
@@ -75,7 +71,8 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
   return self;
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
   // Releases the view if it doesn't have a superview.
   [super didReceiveMemoryWarning];
   
@@ -85,13 +82,15 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
 #pragma mark - View lifecycle
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
+- (void)loadView
+{
   UIView * view = [[UIView alloc] initWithFrame:self.viewFrame];
   self.view = view;
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
   [super viewDidLoad];
   
   // Add tab bar
@@ -103,12 +102,11 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
   
   isTabBarHide_ = YES;
   
-  
   // Place the layout for view's layer
   for (int i = 0; i < [self.tabBarItems count]; ++i) {
     UIView * view = [[[self.tabBarItems objectAtIndex:i] objectForKey:@"viewController"] view];
     [view.layer setAnchorPoint:CGPointMake(.5f, 1.f)];
-    [view.layer setPosition:CGPointMake(view.frame.size.width / 2, kKYArcTabViewHeight)];
+    [view.layer setPosition:CGPointMake(view.frame.size.width * .5f, kKYArcTabViewHeight)];
   }
   
   // Notification for togglling tab bar
@@ -123,20 +121,24 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
 //    [self viewWillAppear:YES];
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload
+{
   [super viewDidUnload];
-  [self _releaseSubviews];
+  self.tabBar = nil;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
   [super viewWillAppear:animated];
   
   // If |tabBar_| is hidden, show it
-  if (isTabBarHide_)
-    [self performSelector:@selector(toggleTabBar:) withObject:nil afterDelay:.6f];
+  if (isTabBarHide_) [self performSelector:@selector(toggleTabBar:)
+                                withObject:nil
+                                afterDelay:.6f];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
   // Return YES for supported orientations
   return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
@@ -144,7 +146,9 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
 #pragma mark - Touch Actions
 
 // Tells the receiver when one or more fingers touch down in a view or window.
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesBegan:(NSSet *)touches
+           withEvent:(UIEvent *)event
+{
   if ([touches count] != 1) return;
   UIView * currentView = [self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
   swipeStartPoint_ = [[touches anyObject] locationInView:currentView].x;
@@ -154,12 +158,16 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
 
 // Tells the receiver when one or more fingers associated
 //   with an event move within a view or window.
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesMoved:(NSSet *)touches
+           withEvent:(UIEvent *)event
+{
   if (! isSwiping_ || [touches count] != 1) return;
 }
 
 // Tells the receiver when one or more fingers are raised from a view or window.
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesEnded:(NSSet *)touches
+           withEvent:(UIEvent *)event
+{
   if (! isSwiping_) return;
   UIView * currentView  = [self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
   CGFloat swipeDistance = [[touches anyObject] locationInView:currentView].x - swipeStartPoint_;
@@ -184,13 +192,15 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
 #pragma mark - KYArcTab Delegate
 
 // Icon for the tab bar item offered
-- (UIImage *)iconFor:(NSUInteger)itemIndex {
+- (UIImage *)iconFor:(NSUInteger)itemIndex
+{
   return [UIImage imageNamed:[[self.tabBarItems objectAtIndex:itemIndex] objectForKey:@"image"]];
 }
 
 // Toggle views beween touched item & previous item
 - (void)touchDownAtItemAtIndex:(NSUInteger)itemIndex
-         withPreviousItemIndex:(NSUInteger)previousItemIndex {
+         withPreviousItemIndex:(NSUInteger)previousItemIndex
+{
   // if |angle > 0|, rotate to left
   CGFloat angle = [self _angleForRatationWithItemIndex:itemIndex
                                      previousItemIndex:previousItemIndex];
@@ -245,7 +255,8 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
 
 // Return angle (in redians) for rotation
 - (CGFloat)_angleForRatationWithItemIndex:(NSUInteger)itemIndex
-                        previousItemIndex:(NSUInteger)previousItemIndex {
+                        previousItemIndex:(NSUInteger)previousItemIndex
+{
   CGFloat degree = (8 + (4 - [self.tabBarItems count]) * 2);
   /*switch ([self.tabBarItems count]) {
     case 2:
@@ -270,7 +281,8 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
 - (void)setup {}
 
 // Toggle tab bar when receive the right notification
-- (void)toggleTabBar:(NSNotification *)notification {
+- (void)toggleTabBar:(NSNotification *)notification
+{
   CGRect tabBarFrame = self.tabBar.frame;
   if (isTabBarHide_) tabBarFrame.origin.y = CGRectGetHeight(self.viewFrame) - tabBarSize_.height;
   else               tabBarFrame.origin.y = CGRectGetHeight(self.viewFrame);

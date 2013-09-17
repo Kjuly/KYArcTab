@@ -14,8 +14,14 @@
 //#define KY_ARCTAB_DEBUG_GRAPHICS 1
 
 // View Basic
-#define kKYArcTabViewHeight CGRectGetHeight([UIScreen mainScreen].applicationFrame)
-#define kKYArcTabViewWidth  CGRectGetWidth([UIScreen mainScreen].applicationFrame)
+// If not defined custom value for |kKYArcTabViewHeight| or |kKYArcTabViewWidth|,
+//   use default application frame's bounding value.
+#ifndef kKYArcTabViewHeight
+  #define kKYArcTabViewHeight CGRectGetHeight([UIScreen mainScreen].applicationFrame)
+#endif
+#ifndef kKYArcTabViewWidth
+  #define kKYArcTabViewWidth CGRectGetWidth([UIScreen mainScreen].applicationFrame)
+#endif
 
 // Notification Name
 // Notification for toggling tab bar
@@ -46,8 +52,8 @@
 }
 
 @property (nonatomic, weak) NSObject <KYArcTabDelegate> * delegate;
-@property (nonatomic, strong) NSMutableArray              * buttons;
-@property (nonatomic, assign) NSInteger                     previousItemIndex;
+@property (nonatomic, strong) NSMutableArray            * buttons;
+@property (nonatomic, assign) NSInteger                   previousItemIndex;
 
 // Designated initializer
 - (id)initWithFrame:(CGRect)frame              // frame of tab bar
