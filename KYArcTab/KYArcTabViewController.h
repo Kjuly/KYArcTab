@@ -20,15 +20,26 @@
 @property (nonatomic, copy)   NSArray  * tabBarItems;
 @property (nonatomic, assign) CGRect     viewFrame;
 
-// Designated initializer
-- (id)  initWithTitle:(NSString *)title                // title
-           tabBarSize:(CGSize)tabBarSize               // size of tab bar
-tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor // background color of tab bar
-             itemSize:(CGSize)itemSize                 // size of items on tab bar
-                arrow:(UIImage *)arrow;                // arrow on the tab bar
-// Setup message, override it to do customize jobs
+/*! Designated initializer.
+ *
+ * \param title The title
+ * \param tabBarSize Size of tab bar
+ * \param tabBarBackgroundColor Background color of tab bar
+ * \param itemSize Size of items on tab bar
+ * \param arrow Arrow on the tab bar
+ *
+ * \returns An KYArcTabViewController instance
+ */
+- (id)  initWithTitle:(NSString *)title
+           tabBarSize:(CGSize)tabBarSize
+tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
+             itemSize:(CGSize)itemSize
+                arrow:(UIImage *)arrow;
+
+/*! Setup message, override it to do customize jobs. */
 - (void)setup;
-// Toggle tab bar when receive the right notification
+
+/*! Toggle tab bar when receive the right notification. */
 - (void)toggleTabBar:(NSNotification *)notification;
 
 @end

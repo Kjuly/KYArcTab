@@ -14,8 +14,14 @@
 //#define KY_ARCTAB_DEBUG_GRAPHICS 1
 
 // View Basic
-#define kKYArcTabViewHeight CGRectGetHeight([UIScreen mainScreen].applicationFrame)
-#define kKYArcTabViewWidth  CGRectGetWidth([UIScreen mainScreen].applicationFrame)
+// If not defined custom value for |kKYArcTabViewHeight| or |kKYArcTabViewWidth|,
+//   use default application frame's bounding value.
+#ifndef kKYArcTabViewHeight
+  #define kKYArcTabViewHeight CGRectGetHeight([UIScreen mainScreen].applicationFrame)
+#endif
+#ifndef kKYArcTabViewWidth
+  #define kKYArcTabViewWidth CGRectGetWidth([UIScreen mainScreen].applicationFrame)
+#endif
 
 // Notification Name
 // Notification for toggling tab bar
@@ -46,21 +52,34 @@
 }
 
 @property (nonatomic, weak) NSObject <KYArcTabDelegate> * delegate;
-@property (nonatomic, strong) NSMutableArray              * buttons;
-@property (nonatomic, assign) NSInteger                     previousItemIndex;
+@property (nonatomic, strong) NSMutableArray            * buttons;
+@property (nonatomic, assign) NSInteger                   previousItemIndex;
 
-// Designated initializer
-- (id)initWithFrame:(CGRect)frame              // frame of tab bar
-         tabBarSize:(CGSize)tabBarSize         // size of tab bar
-    backgroundColor:(UIColor *)backgroundColor // background color of tab bar
-           itemSize:(CGSize)itemSize           // size of items on tab bar
-          itemCount:(NSUInteger)itemCount      // number of items on tab bar
-              arrow:(UIImage *)arrow           // arrow on the tab bar
-                tag:(NSInteger)tag             // tag for the tab bar
+/*! Designated initializer for KYArcTab.
+ *
+ * \param frame Frame of tab bar
+ * \param tabBarSize Size of tab bar
+ * \param backgroundColor Background color of tab bar
+ * \param itemSize Size of items on tab bar
+ * \param itemCount Number of items on tab bar
+ * \param arrow The circle arrow on the tab bar
+ * \param tag The tag for the tab bar
+ * \param delegate The delegate
+ *
+ * \returns An KYArcTab instance
+ */
+- (id)initWithFrame:(CGRect)frame
+         tabBarSize:(CGSize)tabBarSize
+    backgroundColor:(UIColor *)backgroundColor
+           itemSize:(CGSize)itemSize
+          itemCount:(NSUInteger)itemCount
+              arrow:(UIImage *)arrow
+                tag:(NSInteger)tag
            delegate:(NSObject <KYArcTabDelegate> *)delegate;
-// Action of touch down on tab bar item
+
+/*! Action of touch down on tab bar item. */
 - (void)touchDownAction:(UIButton *)button;
-// Action for selected item
+/*! Action for selected item. */
 - (void)selectItemAtIndex:(NSInteger)index;
 // TODO:
 //   This message is for device's rotation management
