@@ -16,7 +16,7 @@
                    * viewControllerFour;
 }
 
-@property (nonatomic, retain) UIViewController * viewControllerOne,
+@property (nonatomic, strong) UIViewController * viewControllerOne,
                                                * viewControllerTwo,
                                                * viewControllerThree,
                                                * viewControllerFour;
@@ -31,12 +31,10 @@
             viewControllerThree = viewControllerThree_,
             viewControllerFour  = viewControllerFour_;
 
-- (void)dealloc {
-  self.viewControllerOne =
-    self.viewControllerTwo =
-    self.viewControllerThree =
-  self.viewControllerFour = nil;
-  [super dealloc];
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	
+	[self setup];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -51,7 +49,7 @@
 // Override |KYArcTabViewController|'s |-setup|
 - (void)setup {
   // Set View Frame
-  self.viewFrame = (CGRect){CGPointZero, {kKYViewWidth, kKYViewHeight}};
+//  self.viewFrame = (CGRect){CGPointZero, {kKYViewWidth, kKYViewHeight}};
   
   // Add child view controllers to each tab
   viewControllerOne_   = [[UIViewController alloc] init];
@@ -60,11 +58,11 @@
   viewControllerFour_  = [[UIViewController alloc] init];
   
   // Set child views' Frame
-  CGRect childViewFrame = self.viewFrame;
-  [viewControllerOne_.view   setFrame:childViewFrame];
-  [viewControllerTwo_.view   setFrame:childViewFrame];
-  [viewControllerThree_.view setFrame:childViewFrame];
-  [viewControllerFour_.view  setFrame:childViewFrame];
+//  CGRect childViewFrame = self.viewFrame;
+//  [viewControllerOne_.view   setFrame:childViewFrame];
+//  [viewControllerTwo_.view   setFrame:childViewFrame];
+//  [viewControllerThree_.view setFrame:childViewFrame];
+//  [viewControllerFour_.view  setFrame:childViewFrame];
   
   // Set child views' background color
   [viewControllerOne_.view   setBackgroundColor:[UIColor blackColor]];
@@ -72,15 +70,17 @@
   [viewControllerThree_.view setBackgroundColor:[UIColor greenColor]];
   [viewControllerFour_.view  setBackgroundColor:[UIColor blueColor]];
   
+	self.viewControllers = @[viewControllerOne_, viewControllerTwo_, viewControllerThree_, viewControllerFour_];
+	
   // Add child views as tab bar items
-  self.tabBarItems = @[@{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 1],
-                         @"viewController" : viewControllerOne_},
-                       @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 2],
-                         @"viewController" : viewControllerTwo_},
-                       @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 3],
-                         @"viewController" : viewControllerThree_},
-                       @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 4],
-                         @"viewController" : viewControllerFour_}];
+//  self.tabBarItems = @[@{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 1],
+//                         @"viewController" : viewControllerOne_},
+//                       @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 2],
+//                         @"viewController" : viewControllerTwo_},
+//                       @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 3],
+//                         @"viewController" : viewControllerThree_},
+//                       @{@"image"          : [NSString stringWithFormat:kKYITabBarItemImageNameFormat, 4],
+//                         @"viewController" : viewControllerFour_}];
   
   // Add a gesture signal on the first view
   UIImage * gestureImage = [UIImage imageNamed:kKYIArcTabGestureHelp];
@@ -92,7 +92,6 @@
   [gestureImageView setImage:gestureImage];
   [gestureImageView setUserInteractionEnabled:YES];
   [viewControllerOne_.view addSubview:gestureImageView];
-  [gestureImageView release];
 }
 
 @end

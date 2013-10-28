@@ -27,7 +27,7 @@
 		7FA9122B169C473600767CCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FA9122A169C473600767CCF /* Foundation.framework */; };
 		7FA9122D169C473600767CCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FA9122C169C473600767CCF /* CoreGraphics.framework */; };
 		7FA91233169C473600767CCF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7FA91231169C473600767CCF /* InfoPlist.strings */; };
-		7FA91235169C473600767CCF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA91234169C473600767CCF /* main.m */; };
+		7FA91235169C473600767CCF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA91234169C473600767CCF /* main.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		7FA91239169C473600767CCF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA91238169C473600767CCF /* AppDelegate.m */; };
 		7FA91260169C4C3600767CCF /* Default-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FA9124E169C4C3600767CCF /* Default-568h.png */; };
 		7FA91261169C4C3600767CCF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FA9124F169C4C3600767CCF /* Default-568h@2x.png */; };
@@ -419,6 +419,7 @@
 		7FA91243169C473600767CCF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "KYArcTabDemo/KYArcTabDemo-Prefix.pch";
 				INFOPLIST_FILE = "KYArcTabDemo/KYArcTabDemo-Info.plist";
@@ -431,6 +432,7 @@
 		7FA91244169C473600767CCF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "KYArcTabDemo/KYArcTabDemo-Prefix.pch";
 				INFOPLIST_FILE = "KYArcTabDemo/KYArcTabDemo-Info.plist";

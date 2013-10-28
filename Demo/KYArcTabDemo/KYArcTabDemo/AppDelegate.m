@@ -12,25 +12,22 @@
 
 @implementation AppDelegate
 
-- (void)dealloc {
-  [_window release];
-  [super dealloc];
-}
 
 - (BOOL)          application:(UIApplication *)application
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+  self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   // Override point for customization after application launch.
   
   // Setup root view controller
-  ArcTabViewController * arcTabViewController = [ArcTabViewController alloc];
-  [arcTabViewController initWithTitle:@"KYArcTab"
-                           tabBarSize:(CGSize){kKYTabBarWdith, kKYTabBarHeight}
-                tabBarBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:kKYITabBarBackground]]
-                             itemSize:(CGSize){kKYTabBarItemWidth, kKYTabBarItemHeight}
-                                arrow:[UIImage imageNamed:kKYITabBarArrow]];
+//  ArcTabViewController * arcTabViewController = [ArcTabViewController alloc];
+//  [arcTabViewController initWithTitle:@"KYArcTab"
+//                           tabBarSize:(CGSize){kKYTabBarWdith, kKYTabBarHeight}
+//                tabBarBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:kKYITabBarBackground]]
+//                             itemSize:(CGSize){kKYTabBarItemWidth, kKYTabBarItemHeight}
+//                                arrow:[UIImage imageNamed:kKYITabBarArrow]];
+	
+	ArcTabViewController * arcTabViewController = [[ArcTabViewController alloc] init];
   [self.window setRootViewController:arcTabViewController];
-  [arcTabViewController release];
   
   [self.window makeKeyAndVisible];
   [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];

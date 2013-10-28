@@ -10,36 +10,21 @@
 
 #import "KYArcTab.h"
 
-@interface KYArcTabViewController : UIViewController <KYArcTabDelegate> {
-  KYArcTab * tabBar_;
-  NSArray  * tabBarItems_;
-  CGRect     viewFrame_;
-}
+@protocol KYArcTabViewControllerDelegate <NSObject>
+@optional
 
-@property (nonatomic, strong) KYArcTab * tabBar;
-@property (nonatomic, copy)   NSArray  * tabBarItems;
-@property (nonatomic, assign) CGRect     viewFrame;
+@end
 
-/*! Designated initializer.
- *
- * \param title The title
- * \param tabBarSize Size of tab bar
- * \param tabBarBackgroundColor Background color of tab bar
- * \param itemSize Size of items on tab bar
- * \param arrow Arrow on the tab bar
- *
- * \returns An KYArcTabViewController instance
- */
-- (id)  initWithTitle:(NSString *)title
-           tabBarSize:(CGSize)tabBarSize
-tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
-             itemSize:(CGSize)itemSize
-                arrow:(UIImage *)arrow;
+@interface KYArcTabViewController : UIViewController <KYArcTabDelegate>
 
-/*! Setup message, override it to do customize jobs. */
-- (void)setup;
+@property (nonatomic, weak) id <KYArcTabViewControllerDelegate> delegate;
+@property (nonatomic, readonly) KYArcTab *tabBar;
+@property (nonatomic, copy)   NSArray  *viewControllers;
+@property (nonatomic, weak) UIViewController *selectedViewController;
+@property (nonatomic) NSInteger selectedIndex;
+@property (nonatomic, copy) NSArray *customizableViewControllers;
+@property (nonatomic, readonly) UINavigationController *moreNavigationController;
 
-/*! Toggle tab bar when receive the right notification. */
-- (void)toggleTabBar:(NSNotification *)notification;
+- (void)setTabBarHidden:(BOOL)hidden animated:(BOOL)animated;
 
 @end
