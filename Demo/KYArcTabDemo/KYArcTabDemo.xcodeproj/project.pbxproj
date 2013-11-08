@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2CA2E043181E30B5008848B5 /* KYArcTabItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CA2E042181E30B5008848B5 /* KYArcTabItem.m */; };
 		7F76C6F5169D888A00298814 /* ArcTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F76C6F4169D888A00298814 /* ArcTabViewController.m */; };
 		7F76C6F7169D8AE500298814 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F76C6F6169D8AE500298814 /* QuartzCore.framework */; };
 		7F76C709169D923300298814 /* KYITabBarArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F76C6F9169D923300298814 /* KYITabBarArrow.png */; };
@@ -53,6 +54,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2CA2E041181E30B5008848B5 /* KYArcTabItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYArcTabItem.h; sourceTree = "<group>"; };
+		2CA2E042181E30B5008848B5 /* KYArcTabItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYArcTabItem.m; sourceTree = "<group>"; };
 		7F76C6F3169D888A00298814 /* ArcTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArcTabViewController.h; sourceTree = "<group>"; };
 		7F76C6F4169D888A00298814 /* ArcTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArcTabViewController.m; sourceTree = "<group>"; };
 		7F76C6F6169D8AE500298814 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -236,6 +239,8 @@
 			children = (
 				7FA91276169C4D7E00767CCF /* KYArcTab.h */,
 				7FA91277169C4D7E00767CCF /* KYArcTab.m */,
+				2CA2E041181E30B5008848B5 /* KYArcTabItem.h */,
+				2CA2E042181E30B5008848B5 /* KYArcTabItem.m */,
 				7FA91278169C4D7E00767CCF /* KYArcTabViewController.h */,
 				7FA91279169C4D7E00767CCF /* KYArcTabViewController.m */,
 			);
@@ -340,6 +345,7 @@
 				7FA91235169C473600767CCF /* main.m in Sources */,
 				7FA91239169C473600767CCF /* AppDelegate.m in Sources */,
 				7FA91274169C4CA200767CCF /* Constants.m in Sources */,
+				2CA2E043181E30B5008848B5 /* KYArcTabItem.m in Sources */,
 				7FA9127A169C4D7E00767CCF /* KYArcTab.m in Sources */,
 				7FA9127B169C4D7E00767CCF /* KYArcTabViewController.m in Sources */,
 				7F76C6F5169D888A00298814 /* ArcTabViewController.m in Sources */,
@@ -425,6 +431,7 @@
 				INFOPLIST_FILE = "KYArcTabDemo/KYArcTabDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -438,6 +445,7 @@
 				INFOPLIST_FILE = "KYArcTabDemo/KYArcTabDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

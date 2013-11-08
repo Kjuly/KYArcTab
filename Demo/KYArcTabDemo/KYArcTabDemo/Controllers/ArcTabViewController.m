@@ -70,6 +70,11 @@
   [viewControllerThree_.view setBackgroundColor:[UIColor greenColor]];
   [viewControllerFour_.view  setBackgroundColor:[UIColor blueColor]];
   
+	viewControllerOne_.arcTabItem = [[KYArcTabItem alloc] initWithTitle:nil image:[UIImage imageNamed:[NSString stringWithFormat:kKYITabBarItemImageNameFormat, 1]] selectedImage:nil];
+	viewControllerTwo_.arcTabItem = [[KYArcTabItem alloc] initWithTitle:nil image:[UIImage imageNamed:[NSString stringWithFormat:kKYITabBarItemImageNameFormat, 2]] selectedImage:nil];
+	viewControllerThree_.arcTabItem = [[KYArcTabItem alloc] initWithTitle:nil image:[UIImage imageNamed:[NSString stringWithFormat:kKYITabBarItemImageNameFormat, 3]] selectedImage:nil];
+	viewControllerFour_.arcTabItem = [[KYArcTabItem alloc] initWithTitle:nil image:[UIImage imageNamed:[NSString stringWithFormat:kKYITabBarItemImageNameFormat, 4]] selectedImage:nil];
+	
 	self.viewControllers = @[viewControllerOne_, viewControllerTwo_, viewControllerThree_, viewControllerFour_];
 	
   // Add child views as tab bar items
@@ -92,6 +97,8 @@
   [gestureImageView setImage:gestureImage];
   [gestureImageView setUserInteractionEnabled:YES];
   [viewControllerOne_.view addSubview:gestureImageView];
+	
+//	self.swipeEnagled = YES;
 }
 
 @end
