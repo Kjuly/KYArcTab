@@ -8,6 +8,8 @@
 
 #import "KYArcTabViewController.h"
 
+#import "KYHorizontalSwipeGestureRecognizer.h"
+
 @interface KYArcTabViewController () {
 	
 	NSMutableArray *_gestureRecognizers;
@@ -115,15 +117,19 @@
 	}
 	
 	if (swipeEnagled) {
-		UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft:)];
-		leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
-		[self.view addGestureRecognizer:leftSwipeGestureRecognizer];
-		[_gestureRecognizers addObject:leftSwipeGestureRecognizer];
+//		UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft:)];
+//		leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+//		[self.view addGestureRecognizer:leftSwipeGestureRecognizer];
+//		[_gestureRecognizers addObject:leftSwipeGestureRecognizer];
+//		
+//		UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight:)];
+//		rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+//		[self.view addGestureRecognizer:rightSwipeGestureRecognizer];
+//		[_gestureRecognizers addObject:rightSwipeGestureRecognizer];
 		
-		UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight:)];
-		rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-		[self.view addGestureRecognizer:rightSwipeGestureRecognizer];
-		[_gestureRecognizers addObject:rightSwipeGestureRecognizer];
+		KYHorizontalSwipeGestureRecognizer *swipeGestureRecognizer = [[KYHorizontalSwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
+		[self.view addGestureRecognizer:swipeGestureRecognizer];
+		[_gestureRecognizers addObject:swipeGestureRecognizer];
 	}
 	else {
 		for (UIGestureRecognizer *gestureRecognizer in _gestureRecognizers) {
@@ -239,6 +245,16 @@
 }
 
 #pragma mark - Swipe
+- (void)didSwipe:(KYHorizontalSwipeGestureRecognizer *)swipeGestureRecognizer {
+	
+	if (swipeGestureRecognizer.direction == KYHorizontalSwipeGestureRecognizerDirectionLeft) {
+		[self swipeLeft:(id)swipeGestureRecognizer];
+	}
+	else if (swipeGestureRecognizer.direction == KYHorizontalSwipeGestureRecognizerDirectionRight) {
+		[self swipeRight:(id)swipeGestureRecognizer];
+	}
+}
+
 - (void)swipeLeft:(UISwipeGestureRecognizer *)swipeGestureRecognizer {
 	
 	if (self.selectedIndex < self.viewControllers.count - 1) {

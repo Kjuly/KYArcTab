@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C2526191835E7FE008071CA /* KYHorizontalSwipeGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2526181835E7FE008071CA /* KYHorizontalSwipeGestureRecognizer.m */; };
 		2CA2E043181E30B5008848B5 /* KYArcTabItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CA2E042181E30B5008848B5 /* KYArcTabItem.m */; };
 		7F76C6F5169D888A00298814 /* ArcTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F76C6F4169D888A00298814 /* ArcTabViewController.m */; };
 		7F76C6F7169D8AE500298814 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F76C6F6169D8AE500298814 /* QuartzCore.framework */; };
@@ -54,6 +55,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C2526171835E7FE008071CA /* KYHorizontalSwipeGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYHorizontalSwipeGestureRecognizer.h; sourceTree = "<group>"; };
+		2C2526181835E7FE008071CA /* KYHorizontalSwipeGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYHorizontalSwipeGestureRecognizer.m; sourceTree = "<group>"; };
 		2CA2E041181E30B5008848B5 /* KYArcTabItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYArcTabItem.h; sourceTree = "<group>"; };
 		2CA2E042181E30B5008848B5 /* KYArcTabItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYArcTabItem.m; sourceTree = "<group>"; };
 		7F76C6F3169D888A00298814 /* ArcTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArcTabViewController.h; sourceTree = "<group>"; };
@@ -243,6 +246,8 @@
 				2CA2E042181E30B5008848B5 /* KYArcTabItem.m */,
 				7FA91278169C4D7E00767CCF /* KYArcTabViewController.h */,
 				7FA91279169C4D7E00767CCF /* KYArcTabViewController.m */,
+				2C2526171835E7FE008071CA /* KYHorizontalSwipeGestureRecognizer.h */,
+				2C2526181835E7FE008071CA /* KYHorizontalSwipeGestureRecognizer.m */,
 			);
 			name = KYArcTab;
 			path = ../../KYArcTab;
@@ -346,6 +351,7 @@
 				7FA91239169C473600767CCF /* AppDelegate.m in Sources */,
 				7FA91274169C4CA200767CCF /* Constants.m in Sources */,
 				2CA2E043181E30B5008848B5 /* KYArcTabItem.m in Sources */,
+				2C2526191835E7FE008071CA /* KYHorizontalSwipeGestureRecognizer.m in Sources */,
 				7FA9127A169C4D7E00767CCF /* KYArcTab.m in Sources */,
 				7FA9127B169C4D7E00767CCF /* KYArcTabViewController.m in Sources */,
 				7F76C6F5169D888A00298814 /* ArcTabViewController.m in Sources */,

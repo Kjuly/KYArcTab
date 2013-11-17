@@ -98,7 +98,7 @@
   [gestureImageView setUserInteractionEnabled:YES];
   [viewControllerOne_.view addSubview:gestureImageView];
 	
-//	self.swipeEnagled = YES;
+	self.swipeEnagled = YES;
 }
 
 @end
