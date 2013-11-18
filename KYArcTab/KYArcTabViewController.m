@@ -10,7 +10,7 @@
 
 #import "KYHorizontalSwipeGestureRecognizer.h"
 
-@interface KYArcTabViewController () {
+@interface KYArcTabViewController () <UIGestureRecognizerDelegate> {
 	
 	NSMutableArray *_gestureRecognizers;
 }
@@ -128,6 +128,7 @@
 //		[_gestureRecognizers addObject:rightSwipeGestureRecognizer];
 		
 		KYHorizontalSwipeGestureRecognizer *swipeGestureRecognizer = [[KYHorizontalSwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
+		swipeGestureRecognizer.delegate = self;
 		[self.view addGestureRecognizer:swipeGestureRecognizer];
 		[_gestureRecognizers addObject:swipeGestureRecognizer];
 	}
@@ -299,6 +300,11 @@
 #pragma mark - KYArcTabDelegate
 - (void)tabBar:(KYArcTab *)tabBar didSelectItem:(KYArcTabItem *)item {
 	
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+	return YES;
 }
 
 #pragma mark - Legacy
