@@ -29,6 +29,7 @@ static CGFloat const _kKYHorizontalSwipeGestureRecognizerMinimumDistant = 50.0f;
 	if (self) {
 		_direction = KYHorizontalSwipeGestureRecognizerDirectionNone;
 		self.state = UIGestureRecognizerStatePossible;
+//		self.cancelsTouchesInView = NO;
 	}
 	return self;
 }
@@ -41,6 +42,7 @@ static CGFloat const _kKYHorizontalSwipeGestureRecognizerMinimumDistant = 50.0f;
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 
 	if (touches.count != 1) {
+		self.state = UIGestureRecognizerStateFailed;
 		return;
 	}
 	
@@ -50,6 +52,7 @@ static CGFloat const _kKYHorizontalSwipeGestureRecognizerMinimumDistant = 50.0f;
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 
 	if (touches.count != 1) {
+		self.state = UIGestureRecognizerStateFailed;
 		return;
 	}
 }
@@ -57,6 +60,7 @@ static CGFloat const _kKYHorizontalSwipeGestureRecognizerMinimumDistant = 50.0f;
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 
 	if (touches.count != 1) {
+		self.state = UIGestureRecognizerStateFailed;
 		return;
 	}
 
@@ -73,6 +77,7 @@ static CGFloat const _kKYHorizontalSwipeGestureRecognizerMinimumDistant = 50.0f;
 		self.state = UIGestureRecognizerStateRecognized;
 	}
 	else {
+		self.state = UIGestureRecognizerStateFailed;
 		return;
 	}
 }
