@@ -44,11 +44,11 @@ static CGSize tabBarSize_; // size of tab bar
 }
 
 // Designated initializer
-- (instancetype)  initWithTitle:(NSString *)title
-           tabBarSize:(CGSize)tabBarSize
-tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
-             itemSize:(CGSize)itemSize
-                arrow:(UIImage *)arrow
+- (instancetype)initWithTitle:(NSString *)title
+                   tabBarSize:(CGSize)tabBarSize
+        tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
+                     itemSize:(CGSize)itemSize
+                        arrow:(UIImage *)arrow
 {
   if (self = [self init]) {
     // Set title if |title| is not nil

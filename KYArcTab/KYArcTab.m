@@ -57,13 +57,13 @@ static CGSize tabBarSize_, itemSize_;
 
 // Designated initializer
 - (instancetype)initWithFrame:(CGRect)frame
-         tabBarSize:(CGSize)tabBarSize
-    backgroundColor:(UIColor *)backgroundColor
-           itemSize:(CGSize)itemSize
-          itemCount:(NSUInteger)itemCount
-              arrow:(UIImage *)arrow
-                tag:(NSInteger)tag
-           delegate:(id <KYArcTabDelegate>)delegate
+                   tabBarSize:(CGSize)tabBarSize
+              backgroundColor:(UIColor *)backgroundColor
+                     itemSize:(CGSize)itemSize
+                    itemCount:(NSUInteger)itemCount
+                        arrow:(UIImage *)arrow
+                          tag:(NSInteger)tag
+                     delegate:(id <KYArcTabDelegate>)delegate
 {
   if (self = [self initWithFrame:frame]) {
     // Background color
