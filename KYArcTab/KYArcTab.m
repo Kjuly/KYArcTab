@@ -291,6 +291,28 @@ static CGSize tabBarSize_, itemSize_;
                                                   tabAreaHalfHeight - triangleA - buttonRadius)];
       break;
     }
+      
+    case 5: {
+      CGFloat degree    = M_PI / 10.f; // 20.f * M_PI / 180.f
+      CGFloat triangleA = triangleHypotenuse_ * cosf(degree) - fixValue;
+      CGFloat triangleB = triangleHypotenuse_ * sinf(degree);
+      
+      [self _setButtonWithTag:0 origin:CGPointMake(tabAreaHalfWidth - triangleB - buttonRadius,
+                                                   tabAreaHalfHeight - triangleA - buttonRadius)];
+      [self _setButtonWithTag:4 origin:CGPointMake(tabAreaHalfWidth + triangleB - buttonRadius,
+                                                   tabAreaHalfHeight - triangleA - buttonRadius)];
+      
+      degree    = M_PI / 20.f; // 9.f * M_PI / 180.f
+      triangleA = triangleHypotenuse_ * cosf(degree) - fixValue;
+      triangleB = triangleHypotenuse_ * sinf(degree);
+      [self _setButtonWithTag:1 origin:CGPointMake(tabAreaHalfWidth - triangleB - buttonRadius,
+                                                   tabAreaHalfHeight - triangleA - buttonRadius)];
+      [self _setButtonWithTag:3 origin:CGPointMake(tabAreaHalfWidth + triangleB - buttonRadius,
+                                                   tabAreaHalfHeight - triangleA - buttonRadius)];
+      [self _setButtonWithTag:2 origin:CGPointMake(tabAreaHalfWidth - buttonRadius,
+                                                   tabAreaHalfHeight - triangleHypotenuse_ + fixValue - buttonRadius)];
+      break;
+    }
   }
 }
 
