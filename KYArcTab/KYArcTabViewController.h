@@ -30,7 +30,7 @@
  *
  * \returns An KYArcTabViewController instance
  */
-- (id)  initWithTitle:(NSString *)title
+- (instancetype)  initWithTitle:(NSString *)title
            tabBarSize:(CGSize)tabBarSize
 tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
              itemSize:(CGSize)itemSize

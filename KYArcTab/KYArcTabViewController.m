@@ -44,7 +44,7 @@ static CGSize tabBarSize_; // size of tab bar
 }
 
 // Designated initializer
-- (id)  initWithTitle:(NSString *)title
+- (instancetype)  initWithTitle:(NSString *)title
            tabBarSize:(CGSize)tabBarSize
 tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
              itemSize:(CGSize)itemSize
@@ -109,7 +109,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
   
   // Place the layout for view's layer
   for (int i = 0; i < [self.tabBarItems count]; ++i) {
-    UIView * view = [[[self.tabBarItems objectAtIndex:i] objectForKey:@"viewController"] view];
+    UIView * view = [(self.tabBarItems)[i][@"viewController"] view];
     [view.layer setAnchorPoint:CGPointMake(.5f, 1.f)];
     [view.layer setPosition:CGPointMake(view.frame.size.width * .5f, kKYArcTabViewHeight)];
   }
@@ -179,13 +179,13 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
   
   // Swipe to left
   if (previousItemIndex > 0 && swipeDistance > 50.f) {
-    UIButton * button = [self.tabBar.buttons objectAtIndex:previousItemIndex - 1];
+    UIButton * button = (self.tabBar.buttons)[previousItemIndex - 1];
     [self.tabBar touchDownAction:button];
     button = nil;
   }
   // Swipe to right
   else if (previousItemIndex < [self.tabBarItems count] - 1 && swipeDistance < -50.f) {
-    UIButton * button = [self.tabBar.buttons objectAtIndex:previousItemIndex + 1];
+    UIButton * button = (self.tabBar.buttons)[previousItemIndex + 1];
     [self.tabBar touchDownAction:button];
     button = nil;
   }
@@ -197,7 +197,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
 // Icon for the tab bar item offered
 - (UIImage *)iconFor:(NSUInteger)itemIndex
 {
-  return [UIImage imageNamed:[[self.tabBarItems objectAtIndex:itemIndex] objectForKey:@"image"]];
+  return [UIImage imageNamed:(self.tabBarItems)[itemIndex][@"image"]];
 }
 
 // Toggle views beween touched item & previous item
@@ -226,7 +226,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
   
   // Get the right view controller
   UIViewController * viewController =
-    [[self.tabBarItems objectAtIndex:itemIndex] objectForKey:@"viewController"];
+    (self.tabBarItems)[itemIndex][@"viewController"];
   [viewController.view setTag:kKYNArcTabSelectedViewControllerTag];
   // Toggle views only if the touched item is not the same as the previous item
   if (itemIndex != previousItemIndex) {

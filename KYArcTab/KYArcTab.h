@@ -59,7 +59,7 @@
  *
  * \returns An KYArcTab instance
  */
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
          tabBarSize:(CGSize)tabBarSize
     backgroundColor:(UIColor *)backgroundColor
            itemSize:(CGSize)itemSize

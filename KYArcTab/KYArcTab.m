@@ -56,7 +56,7 @@ static CGSize tabBarSize_, itemSize_;
             arrow    = arrow_;
 
 // Designated initializer
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
          tabBarSize:(CGSize)tabBarSize
     backgroundColor:(UIColor *)backgroundColor
            itemSize:(CGSize)itemSize
@@ -110,7 +110,7 @@ static CGSize tabBarSize_, itemSize_;
     
     // Top Circle Arrow
     arrow_ = [[UIImageView alloc] initWithImage:arrow];
-    UIButton * button = [buttons_ objectAtIndex:0];
+    UIButton * button = [buttons_ firstObject];
     [arrow_ setFrame:button.frame];
     [self.menuArea addSubview:arrow_];
     
@@ -126,7 +126,7 @@ static CGSize tabBarSize_, itemSize_;
 }
 
 // Secondary initializer
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
     [self setFrame:frame];
@@ -154,7 +154,7 @@ static CGSize tabBarSize_, itemSize_;
 // Action for selected item
 - (void)selectItemAtIndex:(NSInteger)index
 {
-  UIButton * button = [buttons_ objectAtIndex:index];
+  UIButton * button = buttons_[index];
   [self _dimAllButtonsExcept:button];
 }
 
@@ -319,7 +319,7 @@ static CGSize tabBarSize_, itemSize_;
 - (void)_setButtonWithTag:(NSInteger)buttonTag
                    origin:(CGPoint)origin
 {
-  UIButton * button = [self.buttons objectAtIndex:buttonTag];
+  UIButton * button = (self.buttons)[buttonTag];
   [button setFrame:(CGRect){origin, itemSize_}];
 }
 
