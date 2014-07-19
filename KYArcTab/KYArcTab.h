@@ -60,13 +60,13 @@
  * \returns An KYArcTab instance
  */
 - (instancetype)initWithFrame:(CGRect)frame
-         tabBarSize:(CGSize)tabBarSize
-    backgroundColor:(UIColor *)backgroundColor
-           itemSize:(CGSize)itemSize
-          itemCount:(NSUInteger)itemCount
-              arrow:(UIImage *)arrow
-                tag:(NSInteger)tag
-           delegate:(id <KYArcTabDelegate>)delegate;
+                   tabBarSize:(CGSize)tabBarSize
+              backgroundColor:(UIColor *)backgroundColor
+                     itemSize:(CGSize)itemSize
+                    itemCount:(NSUInteger)itemCount
+                        arrow:(UIImage *)arrow
+                          tag:(NSInteger)tag
+                     delegate:(id <KYArcTabDelegate>)delegate;
 
 /*! Action of touch down on tab bar item. */
 - (void)touchDownAction:(UIButton *)button;

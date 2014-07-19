@@ -30,11 +30,11 @@
  *
  * \returns An KYArcTabViewController instance
  */
-- (instancetype)  initWithTitle:(NSString *)title
-           tabBarSize:(CGSize)tabBarSize
-tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
-             itemSize:(CGSize)itemSize
-                arrow:(UIImage *)arrow;
+- (instancetype)initWithTitle:(NSString *)title
+                   tabBarSize:(CGSize)tabBarSize
+        tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
+                     itemSize:(CGSize)itemSize
+                        arrow:(UIImage *)arrow;
 
 /*! Setup message, override it to do customize jobs. */
 - (void)setup;
