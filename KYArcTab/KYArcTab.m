@@ -55,20 +55,15 @@ static CGSize tabBarSize_, itemSize_;
 @synthesize menuArea = menuArea_,
             arrow    = arrow_;
 
-- (void)dealloc
-{
-  self.delegate = nil;
-}
-
 // Designated initializer
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
          tabBarSize:(CGSize)tabBarSize
     backgroundColor:(UIColor *)backgroundColor
            itemSize:(CGSize)itemSize
           itemCount:(NSUInteger)itemCount
               arrow:(UIImage *)arrow
                 tag:(NSInteger)tag
-           delegate:(NSObject<KYArcTabDelegate> *)delegate
+           delegate:(id <KYArcTabDelegate>)delegate
 {
   if (self = [self initWithFrame:frame]) {
     // Background color
@@ -77,6 +72,7 @@ static CGSize tabBarSize_, itemSize_;
     tabBarSize_ = tabBarSize;
     itemSize_   = itemSize;
     delegate_   = delegate;
+    
     // The tag allows callers with multiple controls to distinguish between them
     [self setTag:tag];
     
@@ -114,7 +110,7 @@ static CGSize tabBarSize_, itemSize_;
     
     // Top Circle Arrow
     arrow_ = [[UIImageView alloc] initWithImage:arrow];
-    UIButton * button = [buttons_ objectAtIndex:0];
+    UIButton * button = [buttons_ firstObject];
     [arrow_ setFrame:button.frame];
     [self.menuArea addSubview:arrow_];
     
@@ -130,7 +126,7 @@ static CGSize tabBarSize_, itemSize_;
 }
 
 // Secondary initializer
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
     [self setFrame:frame];
@@ -148,15 +144,17 @@ static CGSize tabBarSize_, itemSize_;
   [self _moveArrowToNewPosition];
   
   NSInteger newSelectedItemIndex = [buttons_ indexOfObject:button];
-  if ([delegate_ respondsToSelector:@selector(touchDownAtItemAtIndex:withPreviousItemIndex:)])
-    [delegate_ touchDownAtItemAtIndex:newSelectedItemIndex withPreviousItemIndex:self.previousItemIndex];
+  if ([delegate_ respondsToSelector:@selector(touchDownAtItemAtIndex:withPreviousItemIndex:)]) {
+    [delegate_ touchDownAtItemAtIndex:newSelectedItemIndex
+                withPreviousItemIndex:self.previousItemIndex];
+  }
   self.previousItemIndex = newSelectedItemIndex;
 }
 
 // Action for selected item
 - (void)selectItemAtIndex:(NSInteger)index
 {
-  UIButton * button = [buttons_ objectAtIndex:index];
+  UIButton * button = buttons_[index];
   [self _dimAllButtonsExcept:button];
 }
 
@@ -187,8 +185,9 @@ static CGSize tabBarSize_, itemSize_;
 {
   [self _dimAllButtonsExcept:button];
   
-  if ([delegate_ respondsToSelector:@selector(touchUpInsideItemAtIndex:)])
+  if ([delegate_ respondsToSelector:@selector(touchUpInsideItemAtIndex:)]) {
     [delegate_ touchUpInsideItemAtIndex:[buttons_ indexOfObject:button]];
+  }
 }
 
 // Action of other touches on tab bar item
@@ -320,7 +319,7 @@ static CGSize tabBarSize_, itemSize_;
 - (void)_setButtonWithTag:(NSInteger)buttonTag
                    origin:(CGPoint)origin
 {
-  UIButton * button = [self.buttons objectAtIndex:buttonTag];
+  UIButton * button = (self.buttons)[buttonTag];
   [button setFrame:(CGRect){origin, itemSize_}];
 }
 

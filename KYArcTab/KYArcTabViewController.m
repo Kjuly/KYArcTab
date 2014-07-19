@@ -40,13 +40,11 @@ static CGSize tabBarSize_; // size of tab bar
 - (void)dealloc
 {
   // Remove notification observer
-  [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                  name:kKYNArcTabToggleTabBar
-                                                object:nil];
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 // Designated initializer
-- (id)  initWithTitle:(NSString *)title
+- (instancetype)  initWithTitle:(NSString *)title
            tabBarSize:(CGSize)tabBarSize
 tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
              itemSize:(CGSize)itemSize
@@ -63,9 +61,8 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
     [self setup];
     
     // Create a custom tab bar passing in the number of items
-    CGRect tabBarFrame =
-      (CGRect){{(kKYArcTabViewWidth - tabBarSize_.width) * .5f,
-               CGRectGetHeight(self.viewFrame)}, tabBarSize_};
+    CGRect tabBarFrame = (CGRect){{(kKYArcTabViewWidth - tabBarSize_.width) * .5f,
+        CGRectGetHeight(self.viewFrame)}, tabBarSize_};
     // Generate tab bar
     tabBar_ = [[KYArcTab alloc] initWithFrame:tabBarFrame
                                    tabBarSize:tabBarSize
@@ -112,7 +109,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
   
   // Place the layout for view's layer
   for (int i = 0; i < [self.tabBarItems count]; ++i) {
-    UIView * view = [[[self.tabBarItems objectAtIndex:i] objectForKey:@"viewController"] view];
+    UIView * view = [(self.tabBarItems)[i][@"viewController"] view];
     [view.layer setAnchorPoint:CGPointMake(.5f, 1.f)];
     [view.layer setPosition:CGPointMake(view.frame.size.width * .5f, kKYArcTabViewHeight)];
   }
@@ -122,16 +119,12 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
                                            selector:@selector(toggleTabBar:)
                                                name:kKYNArcTabToggleTabBar
                                              object:nil];
-  
-//  // Implement the completion block
-//  // iOS4 will not call |viewWillAppear:| when the VC is a child of another VC
-//  if (SYSTEM_VERSION_LESS_THAN(@"5.0"))
-//    [self viewWillAppear:YES];
 }
 
 - (void)viewDidUnload
 {
   [super viewDidUnload];
+  
   self.tabBar = nil;
 }
 
@@ -158,6 +151,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
            withEvent:(UIEvent *)event
 {
   if ([touches count] != 1) return;
+  
   UIView * currentView = [self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
   swipeStartPoint_ = [[touches anyObject] locationInView:currentView].x;
   currentView = nil;
@@ -177,6 +171,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
            withEvent:(UIEvent *)event
 {
   if (! isSwiping_) return;
+  
   UIView * currentView  = [self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
   CGFloat swipeDistance = [[touches anyObject] locationInView:currentView].x - swipeStartPoint_;
   currentView = nil;
@@ -184,13 +179,13 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
   
   // Swipe to left
   if (previousItemIndex > 0 && swipeDistance > 50.f) {
-    UIButton * button = [self.tabBar.buttons objectAtIndex:previousItemIndex - 1];
+    UIButton * button = (self.tabBar.buttons)[previousItemIndex - 1];
     [self.tabBar touchDownAction:button];
     button = nil;
   }
   // Swipe to right
   else if (previousItemIndex < [self.tabBarItems count] - 1 && swipeDistance < -50.f) {
-    UIButton * button = [self.tabBar.buttons objectAtIndex:previousItemIndex + 1];
+    UIButton * button = (self.tabBar.buttons)[previousItemIndex + 1];
     [self.tabBar touchDownAction:button];
     button = nil;
   }
@@ -202,7 +197,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
 // Icon for the tab bar item offered
 - (UIImage *)iconFor:(NSUInteger)itemIndex
 {
-  return [UIImage imageNamed:[[self.tabBarItems objectAtIndex:itemIndex] objectForKey:@"image"]];
+  return [UIImage imageNamed:(self.tabBarItems)[itemIndex][@"image"]];
 }
 
 // Toggle views beween touched item & previous item
@@ -215,7 +210,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
   
   // Remove the current view controller's view
   UIView * currentView = [self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
-  if (itemIndex != previousItemIndex)
+  if (itemIndex != previousItemIndex) {
     [UIView animateWithDuration:.3f
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
@@ -226,12 +221,12 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
                      completion:^(BOOL finished) {
                        [currentView removeFromSuperview];
                      }];
-  else [currentView removeFromSuperview];
+  } else [currentView removeFromSuperview];
   
   
   // Get the right view controller
   UIViewController * viewController =
-    [[self.tabBarItems objectAtIndex:itemIndex] objectForKey:@"viewController"];
+    (self.tabBarItems)[itemIndex][@"viewController"];
   [viewController.view setTag:kKYNArcTabSelectedViewControllerTag];
   // Toggle views only if the touched item is not the same as the previous item
   if (itemIndex != previousItemIndex) {
@@ -250,13 +245,15 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
   }
   
   // Add the new view controller's view
-  if ([viewController respondsToSelector:@selector(viewWillAppear:)])
+  if ([viewController respondsToSelector:@selector(viewWillAppear:)]) {
     [viewController viewWillAppear:NO];
+  }
   
   [self.view insertSubview:viewController.view belowSubview:self.tabBar];
   
-  if ([viewController respondsToSelector:@selector(viewDidAppear:)])
+  if ([viewController respondsToSelector:@selector(viewDidAppear:)]) {
     [viewController viewDidAppear:NO];
+  }
 }
 
 #pragma mark - Private Methods
