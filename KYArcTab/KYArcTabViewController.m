@@ -40,9 +40,7 @@ static CGSize tabBarSize_; // size of tab bar
 - (void)dealloc
 {
   // Remove notification observer
-  [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                  name:kKYNArcTabToggleTabBar
-                                                object:nil];
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 // Designated initializer
@@ -63,9 +61,8 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
     [self setup];
     
     // Create a custom tab bar passing in the number of items
-    CGRect tabBarFrame =
-      (CGRect){{(kKYArcTabViewWidth - tabBarSize_.width) * .5f,
-               CGRectGetHeight(self.viewFrame)}, tabBarSize_};
+    CGRect tabBarFrame = (CGRect){{(kKYArcTabViewWidth - tabBarSize_.width) * .5f,
+        CGRectGetHeight(self.viewFrame)}, tabBarSize_};
     // Generate tab bar
     tabBar_ = [[KYArcTab alloc] initWithFrame:tabBarFrame
                                    tabBarSize:tabBarSize
@@ -122,16 +119,12 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
                                            selector:@selector(toggleTabBar:)
                                                name:kKYNArcTabToggleTabBar
                                              object:nil];
-  
-//  // Implement the completion block
-//  // iOS4 will not call |viewWillAppear:| when the VC is a child of another VC
-//  if (SYSTEM_VERSION_LESS_THAN(@"5.0"))
-//    [self viewWillAppear:YES];
 }
 
 - (void)viewDidUnload
 {
   [super viewDidUnload];
+  
   self.tabBar = nil;
 }
 
@@ -158,6 +151,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
            withEvent:(UIEvent *)event
 {
   if ([touches count] != 1) return;
+  
   UIView * currentView = [self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
   swipeStartPoint_ = [[touches anyObject] locationInView:currentView].x;
   currentView = nil;
@@ -177,6 +171,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
            withEvent:(UIEvent *)event
 {
   if (! isSwiping_) return;
+  
   UIView * currentView  = [self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
   CGFloat swipeDistance = [[touches anyObject] locationInView:currentView].x - swipeStartPoint_;
   currentView = nil;
@@ -215,7 +210,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
   
   // Remove the current view controller's view
   UIView * currentView = [self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
-  if (itemIndex != previousItemIndex)
+  if (itemIndex != previousItemIndex) {
     [UIView animateWithDuration:.3f
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
@@ -226,7 +221,7 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
                      completion:^(BOOL finished) {
                        [currentView removeFromSuperview];
                      }];
-  else [currentView removeFromSuperview];
+  } else [currentView removeFromSuperview];
   
   
   // Get the right view controller
@@ -250,13 +245,15 @@ tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
   }
   
   // Add the new view controller's view
-  if ([viewController respondsToSelector:@selector(viewWillAppear:)])
+  if ([viewController respondsToSelector:@selector(viewWillAppear:)]) {
     [viewController viewWillAppear:NO];
+  }
   
   [self.view insertSubview:viewController.view belowSubview:self.tabBar];
   
-  if ([viewController respondsToSelector:@selector(viewDidAppear:)])
+  if ([viewController respondsToSelector:@selector(viewDidAppear:)]) {
     [viewController viewDidAppear:NO];
+  }
 }
 
 #pragma mark - Private Methods

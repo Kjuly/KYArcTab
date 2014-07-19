@@ -33,27 +33,18 @@
 #define kKYNArcTabSelectedViewControllerTag 1023
 
 
-@protocol KYArcTabDelegate
-
-- (UIImage *)iconFor:(NSUInteger)itemIndex;
-
-@optional
-- (void)touchUpInsideItemAtIndex:(NSUInteger)itemIndex;
-- (void)touchDownAtItemAtIndex:(NSUInteger)itemIndex
-         withPreviousItemIndex:(NSUInteger)previousItemIndex;
-
-@end
+@protocol KYArcTabDelegate;
 
 
 @interface KYArcTab : UIView {
-  NSObject <KYArcTabDelegate> * __weak delegate_;
-  NSMutableArray              * buttons_;
-  NSInteger                     previousItemIndex_;
+  id <KYArcTabDelegate> __weak delegate_;
+  NSMutableArray             * buttons_;
+  NSInteger                    previousItemIndex_;
 }
 
-@property (nonatomic, weak) NSObject <KYArcTabDelegate> * delegate;
-@property (nonatomic, strong) NSMutableArray            * buttons;
-@property (nonatomic, assign) NSInteger                   previousItemIndex;
+@property (nonatomic, strong) NSMutableArray    * buttons;
+@property (nonatomic, assign) NSInteger           previousItemIndex;
+@property (nonatomic, weak) id <KYArcTabDelegate> delegate;
 
 /*! Designated initializer for KYArcTab.
  *
@@ -75,7 +66,7 @@
           itemCount:(NSUInteger)itemCount
               arrow:(UIImage *)arrow
                 tag:(NSInteger)tag
-           delegate:(NSObject <KYArcTabDelegate> *)delegate;
+           delegate:(id <KYArcTabDelegate>)delegate;
 
 /*! Action of touch down on tab bar item. */
 - (void)touchDownAction:(UIButton *)button;
@@ -85,5 +76,17 @@
 //   This message is for device's rotation management
 //- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 //                                duration:(NSTimeInterval)duration;
+
+@end
+
+
+@protocol KYArcTabDelegate <NSObject>
+
+- (UIImage *)iconFor:(NSUInteger)itemIndex;
+
+@optional
+- (void)touchUpInsideItemAtIndex:(NSUInteger)itemIndex;
+- (void)touchDownAtItemAtIndex:(NSUInteger)itemIndex
+         withPreviousItemIndex:(NSUInteger)previousItemIndex;
 
 @end

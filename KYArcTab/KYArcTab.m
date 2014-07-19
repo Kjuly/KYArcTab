@@ -55,11 +55,6 @@ static CGSize tabBarSize_, itemSize_;
 @synthesize menuArea = menuArea_,
             arrow    = arrow_;
 
-- (void)dealloc
-{
-  self.delegate = nil;
-}
-
 // Designated initializer
 - (id)initWithFrame:(CGRect)frame
          tabBarSize:(CGSize)tabBarSize
@@ -68,7 +63,7 @@ static CGSize tabBarSize_, itemSize_;
           itemCount:(NSUInteger)itemCount
               arrow:(UIImage *)arrow
                 tag:(NSInteger)tag
-           delegate:(NSObject<KYArcTabDelegate> *)delegate
+           delegate:(id <KYArcTabDelegate>)delegate
 {
   if (self = [self initWithFrame:frame]) {
     // Background color
@@ -77,6 +72,7 @@ static CGSize tabBarSize_, itemSize_;
     tabBarSize_ = tabBarSize;
     itemSize_   = itemSize;
     delegate_   = delegate;
+    
     // The tag allows callers with multiple controls to distinguish between them
     [self setTag:tag];
     
@@ -148,8 +144,10 @@ static CGSize tabBarSize_, itemSize_;
   [self _moveArrowToNewPosition];
   
   NSInteger newSelectedItemIndex = [buttons_ indexOfObject:button];
-  if ([delegate_ respondsToSelector:@selector(touchDownAtItemAtIndex:withPreviousItemIndex:)])
-    [delegate_ touchDownAtItemAtIndex:newSelectedItemIndex withPreviousItemIndex:self.previousItemIndex];
+  if ([delegate_ respondsToSelector:@selector(touchDownAtItemAtIndex:withPreviousItemIndex:)]) {
+    [delegate_ touchDownAtItemAtIndex:newSelectedItemIndex
+                withPreviousItemIndex:self.previousItemIndex];
+  }
   self.previousItemIndex = newSelectedItemIndex;
 }
 
@@ -187,8 +185,9 @@ static CGSize tabBarSize_, itemSize_;
 {
   [self _dimAllButtonsExcept:button];
   
-  if ([delegate_ respondsToSelector:@selector(touchUpInsideItemAtIndex:)])
+  if ([delegate_ respondsToSelector:@selector(touchUpInsideItemAtIndex:)]) {
     [delegate_ touchUpInsideItemAtIndex:[buttons_ indexOfObject:button]];
+  }
 }
 
 // Action of other touches on tab bar item
