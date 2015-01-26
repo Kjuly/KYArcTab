@@ -10,10 +10,9 @@
 
 #import <UIKit/UIGestureRecognizerSubclass.h>
 
-static CGFloat const _kKYHorizontalSwipeGestureRecognizerMinimumDistant = 50.0f;
-
 @interface KYHorizontalSwipeGestureRecognizer () {
 	CGPoint _startPoint;
+	NSDate *_startTime;
 }
 
 @end
@@ -36,7 +35,11 @@ static CGFloat const _kKYHorizontalSwipeGestureRecognizerMinimumDistant = 50.0f;
 
 #pragma mark - UIGestureRecognizer
 - (void)reset {
+	[super reset];
 	
+	self.state = UIGestureRecognizerStatePossible;
+	_startPoint = CGPointZero;
+	_startTime = nil;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -47,6 +50,7 @@ static CGFloat const _kKYHorizontalSwipeGestureRecognizerMinimumDistant = 50.0f;
 	}
 	
 	_startPoint = [touches.anyObject locationInView:self.view];
+	_startTime = [NSDate date];	
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -64,26 +68,42 @@ static CGFloat const _kKYHorizontalSwipeGestureRecognizerMinimumDistant = 50.0f;
 		return;
 	}
 
+	NSTimeInterval maximumDuration = 1.0f;
+	
+	if ([[NSDate date] timeIntervalSinceDate:_startTime] > maximumDuration) {
+		self.state = UIGestureRecognizerStateFailed;
+		return;
+	}
+	
 	CGPoint currentPoint = [touches.anyObject locationInView:self.view];
 	
-	CGFloat distant = currentPoint.x - _startPoint.x;
+	CGFloat distantX = currentPoint.x - _startPoint.x;
+	CGFloat distantY = currentPoint.y - _startPoint.y;
+	CGFloat maximumTilt = 1.6f;
 	
-	if (distant > _kKYHorizontalSwipeGestureRecognizerMinimumDistant) {
-		_direction = KYHorizontalSwipeGestureRecognizerDirectionRight;
-		self.state = UIGestureRecognizerStateRecognized;
+	if (fabs(distantX) / fabs(distantY) < maximumTilt) {
+		self.state = UIGestureRecognizerStateFailed;
+		return;
 	}
-	else if (distant < -_kKYHorizontalSwipeGestureRecognizerMinimumDistant) {
+	
+	CGFloat minimumDistant = 50.0f;
+	
+	if (distantX > minimumDistant) {
+		_direction = KYHorizontalSwipeGestureRecognizerDirectionRight;
+	}
+	else if (distantX < -minimumDistant) {
 		_direction = KYHorizontalSwipeGestureRecognizerDirectionLeft;
-		self.state = UIGestureRecognizerStateRecognized;
 	}
 	else {
 		self.state = UIGestureRecognizerStateFailed;
 		return;
 	}
+	
+	self.state = UIGestureRecognizerStateRecognized;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-	self.state = UIGestureRecognizerStateFailed;
+	self.state = UIGestureRecognizerStateCancelled;
 }
 
 @end
