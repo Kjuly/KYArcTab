@@ -100,16 +100,6 @@
 	return self.tabBar.selectedIndex;
 }
 
-- (NSArray *)customizableViewControllers {
-	[self doesNotRecognizeSelector:_cmd];
-	return nil;
-}
-
-- (UINavigationController *)moreNavigationController {
-	[self doesNotRecognizeSelector:_cmd];
-	return nil;
-}
-
 - (void)setSwipeEnagled:(BOOL)swipeEnagled {
 	
 	if (_gestureRecognizers == nil) {

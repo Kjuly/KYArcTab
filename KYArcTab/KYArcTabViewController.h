@@ -22,8 +22,6 @@
 @property (nonatomic, copy)   NSArray  *viewControllers;
 @property (nonatomic, weak) UIViewController *selectedViewController;
 @property (nonatomic) NSInteger selectedIndex;
-@property (nonatomic, copy) NSArray *customizableViewControllers;
-@property (nonatomic, readonly) UINavigationController *moreNavigationController;
 
 /*! A Boolean value that determines whether swiping is enabled.
  \discussion If the value of this property is YES , swiping is enabled, and if it is NO , swiping is disabled. The default is NO. 
