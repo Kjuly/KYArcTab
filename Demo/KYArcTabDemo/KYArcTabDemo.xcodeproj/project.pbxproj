@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2C2526191835E7FE008071CA /* KYHorizontalSwipeGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2526181835E7FE008071CA /* KYHorizontalSwipeGestureRecognizer.m */; };
 		2CA2E043181E30B5008848B5 /* KYArcTabItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CA2E042181E30B5008848B5 /* KYArcTabItem.m */; };
-		7F76C6F5169D888A00298814 /* ArcTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F76C6F4169D888A00298814 /* ArcTabViewController.m */; };
 		7F76C6F7169D8AE500298814 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F76C6F6169D8AE500298814 /* QuartzCore.framework */; };
 		7F76C709169D923300298814 /* KYITabBarArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F76C6F9169D923300298814 /* KYITabBarArrow.png */; };
 		7F76C70A169D923300298814 /* KYITabBarArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F76C6FA169D923300298814 /* KYITabBarArrow@2x.png */; };
@@ -47,7 +46,6 @@
 		7FA9126D169C4C3600767CCF /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FA9125B169C4C3600767CCF /* Icon-Small@2x.png */; };
 		7FA9126E169C4C3600767CCF /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FA9125C169C4C3600767CCF /* Icon.png */; };
 		7FA9126F169C4C3600767CCF /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FA9125D169C4C3600767CCF /* Icon@2x.png */; };
-		7FA91274169C4CA200767CCF /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA91273169C4CA200767CCF /* Constants.m */; };
 		7FA9127A169C4D7E00767CCF /* KYArcTab.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA91277169C4D7E00767CCF /* KYArcTab.m */; };
 		7FA9127B169C4D7E00767CCF /* KYArcTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA91279169C4D7E00767CCF /* KYArcTabViewController.m */; };
 		7FAA7F71169DBEEF00C4019B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 7FAA7F6F169DBEEE00C4019B /* iTunesArtwork */; };
@@ -59,8 +57,6 @@
 		2C2526181835E7FE008071CA /* KYHorizontalSwipeGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYHorizontalSwipeGestureRecognizer.m; sourceTree = "<group>"; };
 		2CA2E041181E30B5008848B5 /* KYArcTabItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYArcTabItem.h; sourceTree = "<group>"; };
 		2CA2E042181E30B5008848B5 /* KYArcTabItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYArcTabItem.m; sourceTree = "<group>"; };
-		7F76C6F3169D888A00298814 /* ArcTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArcTabViewController.h; sourceTree = "<group>"; };
-		7F76C6F4169D888A00298814 /* ArcTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArcTabViewController.m; sourceTree = "<group>"; };
 		7F76C6F6169D8AE500298814 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7F76C6F9169D923300298814 /* KYITabBarArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = KYITabBarArrow.png; sourceTree = "<group>"; };
 		7F76C6FA169D923300298814 /* KYITabBarArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "KYITabBarArrow@2x.png"; sourceTree = "<group>"; };
@@ -102,8 +98,6 @@
 		7FA9125B169C4C3600767CCF /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
 		7FA9125C169C4C3600767CCF /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		7FA9125D169C4C3600767CCF /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
-		7FA91272169C4CA200767CCF /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
-		7FA91273169C4CA200767CCF /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		7FA91276169C4D7E00767CCF /* KYArcTab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYArcTab.h; sourceTree = "<group>"; };
 		7FA91277169C4D7E00767CCF /* KYArcTab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYArcTab.m; sourceTree = "<group>"; };
 		7FA91278169C4D7E00767CCF /* KYArcTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYArcTabViewController.h; sourceTree = "<group>"; };
@@ -182,9 +176,6 @@
 			children = (
 				7FA91237169C473600767CCF /* AppDelegate.h */,
 				7FA91238169C473600767CCF /* AppDelegate.m */,
-				7FA91272169C4CA200767CCF /* Constants.h */,
-				7FA91273169C4CA200767CCF /* Constants.m */,
-				7FA9124C169C4C3600767CCF /* Controllers */,
 				7FA9124D169C4C3600767CCF /* Resources */,
 				7FA9122F169C473600767CCF /* Supporting Files */,
 			);
@@ -200,15 +191,6 @@
 				7FA91236169C473600767CCF /* KYArcTabDemo-Prefix.pch */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		7FA9124C169C4C3600767CCF /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				7F76C6F3169D888A00298814 /* ArcTabViewController.h */,
-				7F76C6F4169D888A00298814 /* ArcTabViewController.m */,
-			);
-			path = Controllers;
 			sourceTree = "<group>";
 		};
 		7FA9124D169C4C3600767CCF /* Resources */ = {
@@ -349,12 +331,10 @@
 			files = (
 				7FA91235169C473600767CCF /* main.m in Sources */,
 				7FA91239169C473600767CCF /* AppDelegate.m in Sources */,
-				7FA91274169C4CA200767CCF /* Constants.m in Sources */,
 				2CA2E043181E30B5008848B5 /* KYArcTabItem.m in Sources */,
 				2C2526191835E7FE008071CA /* KYHorizontalSwipeGestureRecognizer.m in Sources */,
 				7FA9127A169C4D7E00767CCF /* KYArcTab.m in Sources */,
 				7FA9127B169C4D7E00767CCF /* KYArcTabViewController.m in Sources */,
-				7F76C6F5169D888A00298814 /* ArcTabViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
