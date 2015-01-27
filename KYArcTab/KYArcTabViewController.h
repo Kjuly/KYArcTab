@@ -10,36 +10,37 @@
 
 #import "KYArcTab.h"
 
-@interface KYArcTabViewController : UIViewController <KYArcTabDelegate> {
-  KYArcTab * tabBar_;
-  NSArray  * tabBarItems_;
-  CGRect     viewFrame_;
-}
+@protocol KYArcTabViewControllerDelegate <NSObject>
+@optional
+// TODO: implement it
+@end
 
-@property (nonatomic, strong) KYArcTab * tabBar;
-@property (nonatomic, copy)   NSArray  * tabBarItems;
-@property (nonatomic, assign) CGRect     viewFrame;
+@interface KYArcTabViewController : UIViewController <KYArcTabDelegate>
 
-/*! Designated initializer.
- *
- * \param title The title
- * \param tabBarSize Size of tab bar
- * \param tabBarBackgroundColor Background color of tab bar
- * \param itemSize Size of items on tab bar
- * \param arrow Arrow on the tab bar
- *
- * \returns An KYArcTabViewController instance
+@property (nonatomic, weak) id <KYArcTabViewControllerDelegate> delegate;
+@property (nonatomic, readonly) KYArcTab *tabBar;
+@property (nonatomic, copy)   NSArray  *viewControllers;
+@property (nonatomic, weak) UIViewController *selectedViewController;
+@property (nonatomic) NSInteger selectedIndex;
+
+/*! A Boolean value that determines whether swiping is enabled.
+ \discussion If the value of this property is YES , swiping is enabled, and if it is NO , swiping is disabled. The default is NO. 
+ When swiping is enabled, UISwipeGestureRecognizer instances are added to KYArcTabViewController.view .
  */
-- (instancetype)initWithTitle:(NSString *)title
-                   tabBarSize:(CGSize)tabBarSize
-        tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
-                     itemSize:(CGSize)itemSize
-                        arrow:(UIImage *)arrow;
+@property (nonatomic, getter = isSwipeEnabled) BOOL swipeEnagled;
 
-/*! Setup message, override it to do customize jobs. */
-- (void)setup;
+/*! Sets whether the arc tab bar is hidden.
+ \param hidden Specify YES to hide the arc tab bar or NO to show it.
+ \param animated Specify YES if you want to animate the change in visibility or NO if you want the arc tab bar to appear immediately.
+ \discussion The default value is NO.
+ */
+- (void)setTabBarHidden:(BOOL)hidden animated:(BOOL)animated;
 
-/*! Toggle tab bar when receive the right notification. */
-- (void)toggleTabBar:(NSNotification *)notification;
+@end
 
+@interface UIViewController (KYArcTabViewController)
+
+/*! The nearest ancestor in the view controller hierarchy that is a arc tab view controller. (read-only)
+ */
+- (KYArcTabViewController *)arcTabViewController;
 @end

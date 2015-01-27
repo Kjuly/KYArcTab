@@ -7,25 +7,27 @@
 //
 
 #import "KYArcTab.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface KYArcTab () {
  @private
-  UIView      * menuArea_;
-  UIImageView * arrow_;
-  
+//  UIView      * menuArea_;
+//  UIImageView * arrow_;
+//  
   CGFloat triangleHypotenuse_;
   CGPoint newPositionForArrow_;
   CGFloat currArcForArrow_;
 }
 
-@property (nonatomic, strong) UIView      * menuArea;
-@property (nonatomic, strong) UIImageView * arrow;
+@property (nonatomic, strong) UIView *menuArea;
+@property (nonatomic, strong) KYArcTabArrowView *arrow;
+@property (nonatomic, strong) NSArray *buttons;
 
-// Button actions except for the |-touchDownAction:|
-/*! Action of touch up inside tab bar item. */
-- (void)_touchUpInsideAction:(UIButton *)button;
-/*! Action of other touches on tab bar item. */
-- (void)_otherTouchesAction:(UIButton*)button;
+//// Button actions except for the |-touchDownAction:|
+///*! Action of touch up inside tab bar item. */
+//- (void)_touchUpInsideAction:(UIButton *)button;
+///*! Action of other touches on tab bar item. */
+//- (void)_otherTouchesAction:(UIButton*)button;
 
 /*! Only selected the pressed item, and highlight it. */
 - (void)_dimAllButtonsExcept:(UIButton *)selectedButton;
@@ -41,99 +43,153 @@
 /*! Update arrow's position. */
 - (void)_moveArrowToNewPosition;
 
+- (void)initializeBackgroundColor;
+
 @end
-
-
-static CGSize tabBarSize_, itemSize_;
 
 
 @implementation KYArcTab
 
-@synthesize delegate          = delegate_,
-            buttons           = buttons_,
-            previousItemIndex = previousItemIndex_;
-@synthesize menuArea = menuArea_,
-            arrow    = arrow_;
+@synthesize items = _items;
+@synthesize selectedIndex = _selectedIndex;
+@dynamic selectedItem;
 
-// Designated initializer
-- (instancetype)initWithFrame:(CGRect)frame
-                   tabBarSize:(CGSize)tabBarSize
-              backgroundColor:(UIColor *)backgroundColor
-                     itemSize:(CGSize)itemSize
-                    itemCount:(NSUInteger)itemCount
-                        arrow:(UIImage *)arrow
-                          tag:(NSInteger)tag
-                     delegate:(id <KYArcTabDelegate>)delegate
-{
-  if (self = [self initWithFrame:frame]) {
-    // Background color
-    if (backgroundColor) [self setBackgroundColor:backgroundColor];
-    
-    tabBarSize_ = tabBarSize;
-    itemSize_   = itemSize;
-    delegate_   = delegate;
-    
-    // The tag allows callers with multiple controls to distinguish between them
-    [self setTag:tag];
-    
-    CGFloat menuAreaHeight = tabBarSize_.height - itemSize_.height * .5f - 8.f;
-    menuArea_ = [UIView alloc];
-    (void)[menuArea_ initWithFrame:(CGRect){{0.f, tabBarSize_.height - menuAreaHeight}, tabBarSize_}];
-    [self addSubview:menuArea_];
-    
-    // Initalize the array to store buttons
-    // And iterate through each item
-    buttons_ = [[NSMutableArray alloc] initWithCapacity:itemCount];
-    for (NSUInteger i = 0; i < itemCount; ++i) {
-      UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-      [button setImage:[delegate_ iconFor:i] forState:UIControlStateNormal];
-      
-      // Register for touch events
-      [button addTarget:self action:@selector(touchDownAction:)      forControlEvents:UIControlEventTouchDown];
-      [button addTarget:self action:@selector(_touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-      [button addTarget:self action:@selector(_otherTouchesAction:)  forControlEvents:UIControlEventTouchUpOutside];
-      [button addTarget:self action:@selector(_otherTouchesAction:)  forControlEvents:UIControlEventTouchDragOutside];
-      [button addTarget:self action:@selector(_otherTouchesAction:)  forControlEvents:UIControlEventTouchDragInside];
-      
-      // Add the button to |buttons_| array
-      [buttons_ addObject:button];
-      [self.menuArea addSubview:button];
-    }
-    
-    // Calculate |triangleHypotenuse_|
-    CGFloat tabAreaHalfHeight = tabBarSize_.height * .5f;
-    CGFloat tabAreaHalfWidth  = tabBarSize_.width  * .5f;
-    triangleHypotenuse_       = (pow(tabAreaHalfHeight, 2) + pow(tabAreaHalfWidth, 2)) / tabBarSize_.height;
-    
-    // Set frame for button, based on |itemCount|
-    [self _setFrameForButtonsBasedOnItemCount];
-    
-    // Top Circle Arrow
-    arrow_ = [[UIImageView alloc] initWithImage:arrow];
-    UIButton * button = [buttons_ firstObject];
-    [arrow_ setFrame:button.frame];
-    [self.menuArea addSubview:arrow_];
-    
-    CGFloat radius         = triangleHypotenuse_;
-    CGFloat centerOriginY  = triangleHypotenuse_;
-    newPositionForArrow_   = CGPointMake(button.frame.origin.x + itemSize_.width  * .5f,
-                                         button.frame.origin.y + itemSize_.height * .5f);
-    currArcForArrow_       = M_PI + asinf((centerOriginY - newPositionForArrow_.y) / radius);
-    self.previousItemIndex = 0;
-    button = nil;
-  }
-  return self;
+#pragma mark - Accessor
+- (void)setItems:(NSArray *)items {
+	[self setItems:items animated:NO];
 }
 
-// Secondary initializer
-- (instancetype)initWithFrame:(CGRect)frame
-{
-  if (self = [super initWithFrame:frame]) {
-    [self setFrame:frame];
-    [self setOpaque:NO];
-  }
-  return self;
+- (void)setItems:(NSArray *)items animated:(BOOL)animated {
+	
+	[self.buttons makeObjectsPerformSelector:@selector(removeFromSuperview)];
+	NSMutableArray *newButtons = [NSMutableArray arrayWithCapacity:items.count];
+	
+	for (KYArcTabItem *tabItem in items) {
+				
+		UIButton *aButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		
+		[aButton setImage:tabItem.image forState:UIControlStateNormal];
+//		[aButton setImage:tabItem.image forState:UIControlStateHighlighted];	// TODO:		
+		[aButton addTarget:self action:@selector(touchDownAction:)      forControlEvents:UIControlEventTouchDown];
+
+		[newButtons addObject:aButton];
+		[self.menuArea addSubview:aButton];
+	}
+	
+	self.buttons = newButtons.copy;
+	[self _setFrameForButtonsBasedOnItemCount];
+	
+	_items = items.copy;
+	
+	
+	if (self.buttons.count == 0) {
+		return;
+	}
+	
+	// Top Circle Arrow
+	UIButton * button = [self.buttons objectAtIndex:0];
+	self.arrow = [[KYArcTabArrowView alloc] initWithFrame:button.frame];//[[UIImageView alloc] initWithImage:[UIImage imageNamed:kKYITabBarArrow]];
+//	[self.arrow setFrame:button.frame];
+	[self.menuArea addSubview:self.arrow];
+	
+	CGFloat itemSize = 44.0f;
+	CGFloat radius         = triangleHypotenuse_;
+	CGFloat centerOriginY  = triangleHypotenuse_;
+	newPositionForArrow_   = CGPointMake(button.frame.origin.x + itemSize  * .5f,
+										 button.frame.origin.y + itemSize * .5f);
+	currArcForArrow_       = M_PI + asinf((centerOriginY - newPositionForArrow_.y) / radius);
+	
+	_selectedIndex = 0;
 }
+
+- (void)setSelectedItem:(KYArcTabItem *)selectedItem {
+	
+	if ([self.items containsObject:selectedItem] == NO) {
+		return;
+	}
+	
+	self.selectedIndex = [self.items indexOfObject:selectedItem];
+}
+
+- (KYArcTabItem *)selectedItem {
+	return (self.items.count != 0) ? self.items[self.selectedIndex] : nil;
+}
+
+- (void)setSelectedIndex:(NSInteger)selectedIndex {
+	
+	[self touchDownAction:self.buttons[selectedIndex]];
+	
+	_selectedIndex = selectedIndex;
+}
+
+#pragma mark - Lifecycle
+- (id)initWithFrame:(CGRect)frame {
+	
+	self = [super initWithFrame:frame];
+	if (self) {
+		
+		self.autoresizesSubviews = YES;
+		self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+		self.opaque = NO;
+		
+		CGFloat itemSize = 44.0f;
+		CGFloat menuAreaHeight = frame.size.height - itemSize * 0.5f - 8.0f;
+		CGRect menuFrame = frame;
+		menuFrame.origin = CGPointZero;
+		menuFrame.origin.y = frame.size.height - menuAreaHeight;
+		
+		self.menuArea = [[UIView alloc] initWithFrame:menuFrame];
+		
+		[self addSubview:self.menuArea];
+		
+		
+		// Calculate |triangleHypotenuse_|
+		CGFloat tabAreaHalfHeight = self.frame.size.height * .5f;
+		CGFloat tabAreaHalfWidth  = self.frame.size.width  * .5f;
+		triangleHypotenuse_       = (pow(tabAreaHalfHeight, 2) + pow(tabAreaHalfWidth, 2)) / self.frame.size.height;
+		
+		self.previousItemIndex = 0;
+		_selectedIndex = 0;
+		
+		[self initializeBackgroundColor];
+	}
+	return self;
+}
+
+#pragma mark - Initialize
+- (void)initializeBackgroundColor {
+
+// TODO:
+	
+	self.backgroundColor = [UIColor clearColor];
+}
+
+#pragma mark - Drawing
+- (void)drawRect:(CGRect)rect {
+	
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	
+	CGFloat height = self.frame.size.height;
+	CGFloat width = self.frame.size.width;
+	CGFloat radius = height + ((width * width) / (4 * height));
+	CGFloat diameter = radius * 2.0f;
+	CGFloat lineWidth = 4.0f;
+	
+	CGContextSetFillColorWithColor(context, [UIColor colorWithWhite:0.1f alpha:1.0f].CGColor);
+
+	CGRect ellipseRect = CGRectZero;
+	ellipseRect.origin.x = (width / 2.0f) - radius;
+	ellipseRect.origin.y = lineWidth / 2.0f;
+	ellipseRect.size = CGSizeMake(diameter, diameter);
+	
+	CGContextFillEllipseInRect(context, ellipseRect);
+	
+	CGContextSetLineWidth(context, lineWidth);
+	CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
+	CGContextStrokeEllipseInRect(context, ellipseRect);
+}
+
+#pragma mark - Legacy
 
 #pragma mark - Public Method
 
@@ -143,18 +199,17 @@ static CGSize tabBarSize_, itemSize_;
   [self _dimAllButtonsExcept:button];
   [self _moveArrowToNewPosition];
   
-  NSInteger newSelectedItemIndex = [buttons_ indexOfObject:button];
-  if ([delegate_ respondsToSelector:@selector(touchDownAtItemAtIndex:withPreviousItemIndex:)]) {
-    [delegate_ touchDownAtItemAtIndex:newSelectedItemIndex
-                withPreviousItemIndex:self.previousItemIndex];
-  }
+  NSInteger newSelectedItemIndex = [self.buttons indexOfObject:button];
+  if ([self.delegate respondsToSelector:@selector(touchDownAtItemAtIndex:withPreviousItemIndex:)])
+    [self.delegate touchDownAtItemAtIndex:newSelectedItemIndex withPreviousItemIndex:self.previousItemIndex];
   self.previousItemIndex = newSelectedItemIndex;
+	_selectedIndex = newSelectedItemIndex;
 }
 
 // Action for selected item
 - (void)selectItemAtIndex:(NSInteger)index
 {
-  UIButton * button = buttons_[index];
+  UIButton * button = [self.buttons objectAtIndex:index];
   [self _dimAllButtonsExcept:button];
 }
 
@@ -178,39 +233,40 @@ static CGSize tabBarSize_, itemSize_;
   [self dimAllButtonsExcept:selectedButton];
 }*/
 
-#pragma mark - Private Methods of Button Actions
-
-// Action of touch up inside tab bar item
-- (void)_touchUpInsideAction:(UIButton *)button
-{
-  [self _dimAllButtonsExcept:button];
-  
-  if ([delegate_ respondsToSelector:@selector(touchUpInsideItemAtIndex:)]) {
-    [delegate_ touchUpInsideItemAtIndex:[buttons_ indexOfObject:button]];
-  }
-}
-
-// Action of other touches on tab bar item
-- (void)_otherTouchesAction:(UIButton*)button
-{
-  [self _dimAllButtonsExcept:button];
-}
+//#pragma mark - Private Methods of Button Actions
+//
+//// Action of touch up inside tab bar item
+//- (void)_touchUpInsideAction:(UIButton *)button
+//{
+//  [self _dimAllButtonsExcept:button];
+//  	
+//  if ([self.delegate respondsToSelector:@selector(touchUpInsideItemAtIndex:)])
+//    [self.delegate touchUpInsideItemAtIndex:[self.buttons indexOfObject:button]];
+//}
+//
+//// Action of other touches on tab bar item
+//- (void)_otherTouchesAction:(UIButton*)button
+//{
+//  [self _dimAllButtonsExcept:button];
+//}
 
 #pragma mark - Private Methods
 
 // Only selected the pressed item, and highlight it
 - (void)_dimAllButtonsExcept:(UIButton *)selectedButton
 {
-  for (UIButton * button in buttons_) {
+  for (UIButton * button in self.buttons) {
     if (button == selectedButton) {
       [button setSelected:YES];
       [button setHighlighted:button.selected ? NO : YES];
-      [button setTag:kKYNArcTabSelectedItemTag];
+//      [button setTag:kKYNArcTabSelectedItemTag];
       
+		CGFloat itemSize = 44.0f;
+		
       // Generate new postion for |arrow_|
       CGPoint newPosition = button.frame.origin;
-      newPosition.x += itemSize_.width  * .5f;
-      newPosition.y += itemSize_.height * .5f;
+      newPosition.x += itemSize  * .5f;
+      newPosition.y += itemSize * .5f;
       newPositionForArrow_ = newPosition;
     }
     else {
@@ -241,14 +297,15 @@ static CGSize tabBarSize_, itemSize_;
 //
 - (void)_setFrameForButtonsBasedOnItemCount
 {
-  CGFloat tabAreaHalfHeight = tabBarSize_.height * .5f;
-  CGFloat tabAreaHalfWidth  = tabBarSize_.width  * .5f;
-  CGFloat buttonRadius      = itemSize_.width    * .5f;
+	CGFloat itemSize = 44.0f;
+  CGFloat tabAreaHalfHeight = self.frame.size.height * .5f;
+  CGFloat tabAreaHalfWidth  = self.frame.size.width  * .5f;
+  CGFloat buttonRadius      = itemSize    * .5f;
   CGFloat fixValue          = triangleHypotenuse_ - tabAreaHalfHeight;
   
   switch ([self.buttons count]) {
     case 2: {
-      CGFloat degree    = 12.f * M_PI / 180.f; // = 45 * M_PI / 180
+      CGFloat degree    = 12.f * M_PI / 180.f; // = 15 * M_PI / 180
       CGFloat triangleA = triangleHypotenuse_ * cosf(degree) - fixValue;
       CGFloat triangleB = triangleHypotenuse_ * sinf(degree);
       [self _setButtonWithTag:0 origin:CGPointMake(tabAreaHalfWidth - triangleB - buttonRadius,
@@ -271,8 +328,7 @@ static CGSize tabBarSize_, itemSize_;
       break;
     }
       
-    case 4:
-    default: {
+	  case 4: {
       CGFloat degree    = M_PI / 9.f; // 20.f * M_PI / 180.f
       CGFloat triangleA = triangleHypotenuse_ * cosf(degree) - fixValue;
       CGFloat triangleB = triangleHypotenuse_ * sinf(degree);
@@ -290,28 +346,32 @@ static CGSize tabBarSize_, itemSize_;
                                                   tabAreaHalfHeight - triangleA - buttonRadius)];
       break;
     }
-      
-    case 5: {
-      CGFloat degree    = M_PI / 10.f; // 20.f * M_PI / 180.f
-      CGFloat triangleA = triangleHypotenuse_ * cosf(degree) - fixValue;
-      CGFloat triangleB = triangleHypotenuse_ * sinf(degree);
-      
-      [self _setButtonWithTag:0 origin:CGPointMake(tabAreaHalfWidth - triangleB - buttonRadius,
-                                                   tabAreaHalfHeight - triangleA - buttonRadius)];
-      [self _setButtonWithTag:4 origin:CGPointMake(tabAreaHalfWidth + triangleB - buttonRadius,
-                                                   tabAreaHalfHeight - triangleA - buttonRadius)];
-      
-      degree    = M_PI / 20.f; // 9.f * M_PI / 180.f
-      triangleA = triangleHypotenuse_ * cosf(degree) - fixValue;
-      triangleB = triangleHypotenuse_ * sinf(degree);
-      [self _setButtonWithTag:1 origin:CGPointMake(tabAreaHalfWidth - triangleB - buttonRadius,
-                                                   tabAreaHalfHeight - triangleA - buttonRadius)];
-      [self _setButtonWithTag:3 origin:CGPointMake(tabAreaHalfWidth + triangleB - buttonRadius,
-                                                   tabAreaHalfHeight - triangleA - buttonRadius)];
-      [self _setButtonWithTag:2 origin:CGPointMake(tabAreaHalfWidth - buttonRadius,
-                                                   tabAreaHalfHeight - triangleHypotenuse_ + fixValue - buttonRadius)];
-      break;
-    }
+		  
+	  case 5:
+	  default: {
+		  
+		  [self _setButtonWithTag:2 origin:CGPointMake(tabAreaHalfWidth - buttonRadius,
+													   tabAreaHalfHeight - triangleHypotenuse_ + fixValue - buttonRadius)];
+		  
+		  CGFloat degree    = M_PI / 8.0; //
+		  CGFloat triangleA = triangleHypotenuse_ * cosf(degree) - fixValue;
+		  CGFloat triangleB = triangleHypotenuse_ * sinf(degree);
+		  [self _setButtonWithTag:0 origin:CGPointMake(tabAreaHalfWidth - triangleB - buttonRadius,
+													   tabAreaHalfHeight - triangleA - buttonRadius)];
+		  [self _setButtonWithTag:4 origin:CGPointMake(tabAreaHalfWidth + triangleB - buttonRadius,
+													   tabAreaHalfHeight - triangleA - buttonRadius)];
+		  
+		  degree    = M_PI / 16; //
+		  triangleA = triangleHypotenuse_ * cosf(degree) - fixValue;
+		  triangleB = triangleHypotenuse_ * sinf(degree);
+		  [self _setButtonWithTag:1 origin:CGPointMake(tabAreaHalfWidth - triangleB - buttonRadius,
+													   tabAreaHalfHeight - triangleA - buttonRadius)];
+		  [self _setButtonWithTag:3 origin:CGPointMake(tabAreaHalfWidth + triangleB - buttonRadius,
+													   tabAreaHalfHeight - triangleA - buttonRadius)];
+		  
+		  break;
+	  }
+
   }
 }
 
@@ -319,8 +379,10 @@ static CGSize tabBarSize_, itemSize_;
 - (void)_setButtonWithTag:(NSInteger)buttonTag
                    origin:(CGPoint)origin
 {
-  UIButton * button = (self.buttons)[buttonTag];
-  [button setFrame:(CGRect){origin, itemSize_}];
+	CGFloat itemSize = 44.0f;
+
+  UIButton * button = [self.buttons objectAtIndex:buttonTag];
+	[button setFrame:(CGRect){origin, {itemSize, itemSize}}];
 }
 
 #pragma mark - Animation Control Methods
@@ -343,13 +405,13 @@ static CGSize tabBarSize_, itemSize_;
 // Update arrow's position
 - (void)_moveArrowToNewPosition
 {
-  CGFloat tabAreaHalfHeight  = tabBarSize_.height * .5f;
-  CGFloat tabAreaHalfWidth   = tabBarSize_.width  * .5f;
-  CGFloat triangleHypotenuse = (pow(tabAreaHalfHeight, 2) + pow(tabAreaHalfWidth, 2)) / tabBarSize_.height;
+  CGFloat tabAreaHalfHeight  = self.frame.size.height * .5f;
+  CGFloat tabAreaHalfWidth   = self.frame.size.width  * .5f;
+  CGFloat triangleHypotenuse = (pow(tabAreaHalfHeight, 2) + pow(tabAreaHalfWidth, 2)) / self.frame.size.height;
   
   // Values for |path|
   CGFloat radius            = triangleHypotenuse;
-  CGFloat centerOriginX     = tabBarSize_.width * .5f;
+  CGFloat centerOriginX     = self.frame.size.width * .5f;
   CGFloat centerOriginY     = triangleHypotenuse;
   CGFloat itemCenterOriginX = newPositionForArrow_.x;
   CGFloat itemCenterOriginY = newPositionForArrow_.y;
@@ -401,6 +463,36 @@ static CGSize tabBarSize_, itemSize_;
 {
   // Update the layer's position so that the layer doesn't snap back when the animation completes
   [self.arrow.layer setPosition:newPositionForArrow_];
+}
+
+@end
+
+@implementation KYArcTabArrowView
+
+- (id)initWithFrame:(CGRect)frame {
+	
+	self = [super initWithFrame:frame];
+	if (self) {
+		self.backgroundColor = [UIColor clearColor];
+	}
+	return self;
+}
+
+- (void)drawRect:(CGRect)rect {
+	
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	CGFloat lineWidth = 4.0f;
+	
+	CGContextSetLineWidth(context, lineWidth);
+	CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:0.91f green:0.53f blue:0.07f alpha:1.0f].CGColor);
+	
+	CGRect drawRect = self.bounds;
+	drawRect.origin.x += lineWidth / 2.0f;
+	drawRect.origin.y += lineWidth / 2.0f;
+	drawRect.size.width -= lineWidth;
+	drawRect.size.height -= lineWidth;
+	
+	CGContextStrokeEllipseInRect(context, drawRect);
 }
 
 @end

@@ -8,11 +8,11 @@
 
 #import "KYArcTabViewController.h"
 
-@interface KYArcTabViewController () {
- @private
-  BOOL    isTabBarHide_;    // mark for tab bar's visiablity
-  BOOL    isSwiping_;       // doing swiping
-  CGFloat swipeStartPoint_; // Value of the starting touch point's x location
+#import "KYHorizontalSwipeGestureRecognizer.h"
+
+@interface KYArcTabViewController () <UIGestureRecognizerDelegate> {
+	
+	NSMutableArray *_gestureRecognizers;
 }
 
 /*! Get the delta angle between previous item & current item.
@@ -25,179 +25,285 @@
 - (CGFloat)_angleForRatationWithItemIndex:(NSUInteger)itemIndex
                         previousItemIndex:(NSUInteger)previousItemIndex;
 
+- (void)animateBound;
+
 @end
-
-
-static CGSize tabBarSize_; // size of tab bar
 
 
 @implementation KYArcTabViewController
 
-@synthesize tabBar      = tabBar_,
-            tabBarItems = tabBarItems_,
-            viewFrame   = viewFrame_;
+@synthesize tabBar = _tabBar;
+@synthesize selectedIndex = _selectedIndex;
+@synthesize viewControllers = _viewControllers;
+@synthesize swipeEnagled = _swipeEnagled;
+@dynamic selectedViewController;
 
-- (void)dealloc
-{
-  // Remove notification observer
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
+#pragma mark - Accessor
+- (void)setViewControllers:(NSArray *)viewControllers {
+	
+	NSMutableArray *newItems = [NSMutableArray arrayWithCapacity:viewControllers.count];
+	
+	for (UIViewController *controller in viewControllers) {
+		[controller.view removeFromSuperview];
+		[controller removeFromParentViewController];
+		[controller willMoveToParentViewController:self];
+		
+		controller.view.frame = self.view.frame;	//TODO: sub arcTab height
+		
+		// Place the layout for view's layer
+		controller.view.layer.anchorPoint = CGPointMake(0.5f, 1.0f);
+		controller.view.layer.position = CGPointMake(self.view.frame.size.width * 0.5f, self.view.frame.size.height);	// was kKYArcTabViewHeight
+
+		[self addChildViewController:controller];
+		[controller didMoveToParentViewController:self];
+		
+		if (controller.arcTabItem) {
+			[newItems addObject:controller.arcTabItem];
+		}
+		else {
+			[newItems addObject:[[KYArcTabItem alloc] init]];
+		}
+	}
+	
+	self.tabBar.items = newItems.copy;
+	_viewControllers = viewControllers.copy;
+	
+// TODO: Inherit the previous selected view
+	
+//	self.selectedIndex = 0;
+	self.tabBar.selectedIndex = 0;
 }
 
-// Designated initializer
-- (instancetype)initWithTitle:(NSString *)title
-                   tabBarSize:(CGSize)tabBarSize
-        tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor
-                     itemSize:(CGSize)itemSize
-                        arrow:(UIImage *)arrow
-{
-  if (self = [self init]) {
-    // Set title if |title| is not nil
-    if (title) [self setTitle:title];
-    
-    // Tab bar size
-    tabBarSize_ = tabBarSize;
-    
-    // Custom setup jobs
-    [self setup];
-    
-    // Create a custom tab bar passing in the number of items
-    CGRect tabBarFrame = (CGRect){{(kKYArcTabViewWidth - tabBarSize_.width) * .5f,
-        CGRectGetHeight(self.viewFrame)}, tabBarSize_};
-    // Generate tab bar
-    tabBar_ = [[KYArcTab alloc] initWithFrame:tabBarFrame
-                                   tabBarSize:tabBarSize
-                              backgroundColor:tabBarBackgroundColor
-                                     itemSize:itemSize
-                                    itemCount:self.tabBarItems.count
-                                        arrow:arrow
-                                          tag:0
-                                     delegate:self];
-  }
-  return self;
+- (void)setSelectedViewController:(UIViewController *)selectedViewController {
+	
+	if ([self.viewControllers containsObject:selectedViewController] == NO) {
+		return;
+	}
+	
+	self.selectedIndex = [self.viewControllers indexOfObject:selectedViewController];
 }
 
-- (void)didReceiveMemoryWarning
-{
-  // Releases the view if it doesn't have a superview.
-  [super didReceiveMemoryWarning];
-  
-  // Release any cached data, images, etc that aren't in use.
+- (UIViewController *)selectedViewController {
+	return self.viewControllers[self.selectedIndex];
 }
 
-#pragma mark - View lifecycle
+- (void)setSelectedIndex:(NSInteger)selectedIndex {
 
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView
-{
-  UIView * view = [[UIView alloc] initWithFrame:self.viewFrame];
-  self.view = view;
+	if (selectedIndex == self.tabBar.selectedIndex) {
+		return;
+	}
+	
+	self.tabBar.selectedIndex = selectedIndex;
 }
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad
-{
-  [super viewDidLoad];
-  
-  // Add tab bar
-  [self.view addSubview:tabBar_];
-  
-  // Select the first tab
-  [tabBar_ selectItemAtIndex:0];
-  [self touchDownAtItemAtIndex:0 withPreviousItemIndex:0];
-  
-  isTabBarHide_ = YES;
-  
-  // Place the layout for view's layer
-  for (int i = 0; i < [self.tabBarItems count]; ++i) {
-    UIView * view = [(self.tabBarItems)[i][@"viewController"] view];
-    [view.layer setAnchorPoint:CGPointMake(.5f, 1.f)];
-    [view.layer setPosition:CGPointMake(view.frame.size.width * .5f, kKYArcTabViewHeight)];
-  }
-  
-  // Notification for togglling tab bar
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(toggleTabBar:)
-                                               name:kKYNArcTabToggleTabBar
-                                             object:nil];
+- (NSInteger)selectedIndex {
+	return self.tabBar.selectedIndex;
 }
 
-- (void)viewDidUnload
-{
-  [super viewDidUnload];
-  
-  self.tabBar = nil;
+- (void)setSwipeEnagled:(BOOL)swipeEnagled {
+	
+	if (_gestureRecognizers == nil) {
+		_gestureRecognizers = [[NSMutableArray alloc] initWithCapacity:2];
+	}
+	
+	if (swipeEnagled) {
+//		UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft:)];
+//		leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+//		[self.view addGestureRecognizer:leftSwipeGestureRecognizer];
+//		[_gestureRecognizers addObject:leftSwipeGestureRecognizer];
+//		
+//		UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight:)];
+//		rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+//		[self.view addGestureRecognizer:rightSwipeGestureRecognizer];
+//		[_gestureRecognizers addObject:rightSwipeGestureRecognizer];
+		
+		KYHorizontalSwipeGestureRecognizer *swipeGestureRecognizer = [[KYHorizontalSwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
+		swipeGestureRecognizer.delegate = self;
+		[self.view addGestureRecognizer:swipeGestureRecognizer];
+		[_gestureRecognizers addObject:swipeGestureRecognizer];
+	}
+	else {
+		for (UIGestureRecognizer *gestureRecognizer in _gestureRecognizers) {
+			[self.view removeGestureRecognizer:gestureRecognizer];
+		}
+	}
+	
+	_swipeEnagled = swipeEnagled;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-  [super viewWillAppear:animated];
-  
-  // If |tabBar_| is hidden, show it
-  if (isTabBarHide_) [self performSelector:@selector(toggleTabBar:)
-                                withObject:nil
-                                afterDelay:.6f];
+#pragma mark - Lifecycle
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	
+	CGRect tabBarFrame = self.view.bounds;
+	tabBarFrame.size.height = 88.0f;
+	tabBarFrame.origin.y = self.view.frame.size.height - tabBarFrame.size.height;
+	_tabBar = [[KYArcTab alloc] initWithFrame:tabBarFrame];
+	self.tabBar.delegate = self;
+	
+	[self.view addSubview:self.tabBar];
+	[self setTabBarHidden:YES animated:NO];
+	
+	// Select the first tab
+	// self.selectedIndex = 0; doesn't work in here
+	self.tabBar.selectedIndex = 0;
+//	self.selectedIndex = 0;
+	
+	self.swipeEnagled = NO;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-  // Return YES for supported orientations
-  return (interfaceOrientation == UIInterfaceOrientationPortrait);
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+
 }
 
-#pragma mark - Touch Actions
-
-// Tells the receiver when one or more fingers touch down in a view or window.
-- (void)touchesBegan:(NSSet *)touches
-           withEvent:(UIEvent *)event
-{
-  if ([touches count] != 1) return;
-  
-  UIView * currentView = [self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
-  swipeStartPoint_ = [[touches anyObject] locationInView:currentView].x;
-  currentView = nil;
-  isSwiping_ = YES;
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
+	if (self.tabBar.hidden == YES) {
+		[self setTabBarHidden:NO animated:YES];	// animate after 0.6s delay
+	}
 }
 
-// Tells the receiver when one or more fingers associated
-//   with an event move within a view or window.
-- (void)touchesMoved:(NSSet *)touches
-           withEvent:(UIEvent *)event
-{
-  if (! isSwiping_ || [touches count] != 1) return;
+- (void)didReceiveMemoryWarning {
+	[super didReceiveMemoryWarning];
+	
 }
 
-// Tells the receiver when one or more fingers are raised from a view or window.
-- (void)touchesEnded:(NSSet *)touches
-           withEvent:(UIEvent *)event
-{
-  if (! isSwiping_) return;
-  
-  UIView * currentView  = [self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
-  CGFloat swipeDistance = [[touches anyObject] locationInView:currentView].x - swipeStartPoint_;
-  currentView = nil;
-  NSInteger previousItemIndex = self.tabBar.previousItemIndex;
-  
-  // Swipe to left
-  if (previousItemIndex > 0 && swipeDistance > 50.f) {
-    UIButton * button = (self.tabBar.buttons)[previousItemIndex - 1];
-    [self.tabBar touchDownAction:button];
-    button = nil;
-  }
-  // Swipe to right
-  else if (previousItemIndex < [self.tabBarItems count] - 1 && swipeDistance < -50.f) {
-    UIButton * button = (self.tabBar.buttons)[previousItemIndex + 1];
-    [self.tabBar touchDownAction:button];
-    button = nil;
-  }
-  isSwiping_ = NO;
+#pragma mark - AutoRotate
+#pragma mark iOS6
+- (BOOL)shouldAutorotate {
+	return ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
 }
 
+- (NSUInteger)supportedInterfaceOrientations {
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+		return UIInterfaceOrientationMaskPortrait;
+	} else {
+	    return UIInterfaceOrientationMaskAll;
+	}
+}
+
+#pragma mark iOS5
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+		return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
+	}
+	else {
+		return YES;
+	}
+}
+
+#pragma mark - Appearance and Rotation Methods
+#pragma mark iOS6
+- (BOOL)shouldAutomaticallyForwardAppearanceMethods {
+	return YES;
+}
+
+- (BOOL)shouldAutomaticallyForwardRotationMethods {
+	return YES;
+}
+
+#pragma mark iOS5
+- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers {
+	return YES;
+}
+
+#pragma mark - ArcTab
+- (void)setTabBarHidden:(BOOL)hidden animated:(BOOL)animated {
+	
+	CGRect tabBarFrame = self.tabBar.frame;
+	tabBarFrame.origin.y = self.tabBar.hidden ? self.view.frame.size.height : self.view.frame.size.height - tabBarFrame.size.height;
+	self.tabBar.frame = tabBarFrame;
+	
+	tabBarFrame.origin.y = hidden ? self.view.frame.size.height : self.view.frame.size.height - tabBarFrame.size.height;
+
+	if (animated) {
+		if (hidden == NO) {
+			self.tabBar.hidden = NO;
+		}
+		
+		[UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+			self.tabBar.frame = tabBarFrame;
+		} completion:^(BOOL finished) {
+			self.tabBar.hidden = hidden;
+		}];
+	}
+	else {
+		self.tabBar.frame = tabBarFrame;
+		self.tabBar.hidden = hidden;
+	}
+}
+
+#pragma mark - Swipe
+- (void)didSwipe:(KYHorizontalSwipeGestureRecognizer *)swipeGestureRecognizer {
+	
+	if (swipeGestureRecognizer.direction == KYHorizontalSwipeGestureRecognizerDirectionLeft) {
+		[self swipeLeft:(id)swipeGestureRecognizer];
+	}
+	else if (swipeGestureRecognizer.direction == KYHorizontalSwipeGestureRecognizerDirectionRight) {
+		[self swipeRight:(id)swipeGestureRecognizer];
+	}
+}
+
+- (void)swipeLeft:(UISwipeGestureRecognizer *)swipeGestureRecognizer {
+	
+	if (self.selectedIndex < self.viewControllers.count - 1) {
+		self.selectedIndex++;
+	}
+	else {
+		[self animateBound];
+	}
+}
+
+- (void)swipeRight:(UISwipeGestureRecognizer *)swipeGestureRecognizer {
+
+	if (self.selectedIndex > 0) {
+		self.selectedIndex--;
+	}
+	else {
+		[self animateBound];
+	}
+}
+
+#pragma mark - Animation
+- (void)animateBound {
+// TODO:
+	
+	UIView * currentView = self.selectedViewController.view;
+
+	CGFloat angle = (4 * M_PI / 180.f) * (self.selectedIndex == 0 ? +1 : -1);
+	
+	[UIView animateWithDuration:.2f
+                          delay:0.f
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+						 currentView.transform = CGAffineTransformRotate(currentView.transform, angle);
+                     }
+                     completion:^(BOOL finished) {
+						 [UIView animateKeyframesWithDuration:.2f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+							 currentView.transform = CGAffineTransformRotate(currentView.transform, -angle);
+						 } completion:NULL];
+                     }];
+}
+
+#pragma mark - KYArcTabDelegate
+- (void)tabBar:(KYArcTab *)tabBar didSelectItem:(KYArcTabItem *)item {
+	
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+	return YES;
+}
+
+#pragma mark - Legacy
 #pragma mark - KYArcTab Delegate
 
 // Icon for the tab bar item offered
 - (UIImage *)iconFor:(NSUInteger)itemIndex
 {
-  return [UIImage imageNamed:(self.tabBarItems)[itemIndex][@"image"]];
+	return nil;//[UIImage imageNamed:[[self.tabBarItems objectAtIndex:itemIndex] objectForKey:@"image"]];
 }
 
 // Toggle views beween touched item & previous item
@@ -209,8 +315,8 @@ static CGSize tabBarSize_; // size of tab bar
                                      previousItemIndex:previousItemIndex];
   
   // Remove the current view controller's view
-  UIView * currentView = [self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
-  if (itemIndex != previousItemIndex) {
+	UIView * currentView = self.selectedViewController.view;//[self.view viewWithTag:kKYNArcTabSelectedViewControllerTag];
+  if (itemIndex != previousItemIndex)
     [UIView animateWithDuration:.3f
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
@@ -221,13 +327,12 @@ static CGSize tabBarSize_; // size of tab bar
                      completion:^(BOOL finished) {
                        [currentView removeFromSuperview];
                      }];
-  } else [currentView removeFromSuperview];
+  else [currentView removeFromSuperview];
   
   
   // Get the right view controller
-  UIViewController * viewController =
-    (self.tabBarItems)[itemIndex][@"viewController"];
-  [viewController.view setTag:kKYNArcTabSelectedViewControllerTag];
+  UIViewController * viewController = self.viewControllers[itemIndex];
+//  [viewController.view setTag:kKYNArcTabSelectedViewControllerTag];
   // Toggle views only if the touched item is not the same as the previous item
   if (itemIndex != previousItemIndex) {
     CGAffineTransform transform = CGAffineTransformIdentity;
@@ -245,15 +350,15 @@ static CGSize tabBarSize_; // size of tab bar
   }
   
   // Add the new view controller's view
-  if ([viewController respondsToSelector:@selector(viewWillAppear:)]) {
-    [viewController viewWillAppear:NO];
-  }
+//  if ([viewController respondsToSelector:@selector(viewWillAppear:)])
+//    [viewController viewWillAppear:NO];
   
   [self.view insertSubview:viewController.view belowSubview:self.tabBar];
   
-  if ([viewController respondsToSelector:@selector(viewDidAppear:)]) {
-    [viewController viewDidAppear:NO];
-  }
+//  if ([viewController respondsToSelector:@selector(viewDidAppear:)])
+//    [viewController viewDidAppear:NO];
+	
+	_selectedIndex = itemIndex;
 }
 
 #pragma mark - Private Methods
@@ -262,7 +367,7 @@ static CGSize tabBarSize_; // size of tab bar
 - (CGFloat)_angleForRatationWithItemIndex:(NSUInteger)itemIndex
                         previousItemIndex:(NSUInteger)previousItemIndex
 {
-  CGFloat degree = (8 + (4 - [self.tabBarItems count]) * 2);
+  CGFloat degree = (8 + (4 - self.viewControllers.count) * 2);
   /*switch ([self.tabBarItems count]) {
     case 2:
       degree = 12;
@@ -280,23 +385,19 @@ static CGSize tabBarSize_; // size of tab bar
   return degree * (NSInteger)(previousItemIndex - itemIndex) * M_PI / 180.f;
 }
 
-#pragma mark - Public Methods
+@end
 
-// Setup message, override it to do customize jobs
-- (void)setup {}
+@implementation UIViewController (KYArcTabViewController)
 
-// Toggle tab bar when receive the right notification
-- (void)toggleTabBar:(NSNotification *)notification
-{
-  CGRect tabBarFrame = self.tabBar.frame;
-  if (isTabBarHide_) tabBarFrame.origin.y = CGRectGetHeight(self.viewFrame) - tabBarSize_.height;
-  else               tabBarFrame.origin.y = CGRectGetHeight(self.viewFrame);
-  
-  [UIView animateWithDuration:.3f
-                        delay:0.f
-                      options:UIViewAnimationOptionCurveEaseInOut
-                   animations:^{ [self.tabBar setFrame:tabBarFrame]; }
-                   completion:^(BOOL finished) { isTabBarHide_ = ! isTabBarHide_; }];
+- (KYArcTabViewController *)arcTabViewController {
+	
+	for (UIViewController *viewController = self.parentViewController; viewController != nil; viewController = viewController.parentViewController) {
+		if ([viewController isKindOfClass:[KYArcTabViewController class]]) {
+			return (KYArcTabViewController *)viewController;
+		}
+	}
+	
+	return nil;
 }
 
 @end

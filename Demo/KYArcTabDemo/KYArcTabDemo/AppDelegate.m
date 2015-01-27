@@ -8,29 +8,53 @@
 
 #import "AppDelegate.h"
 
-#import "ArcTabViewController.h"
+#import "KYArcTabViewController.h"
 
 @implementation AppDelegate
 
-- (void)dealloc {
-  [_window release];
-  [super dealloc];
+- (UIViewController *)viewControllerWithBackgroundColor:(UIColor *)backgroundColor tabItemImageIndex:(NSInteger)imageIndex {
+	
+	UIViewController *viewController = [[UIViewController alloc] init];
+	viewController.view.backgroundColor = backgroundColor;
+	
+	NSString *imageName = [NSString stringWithFormat:@"KYTabBarItem%.2ld.png", (long)imageIndex];
+	UIImage *image = [UIImage imageNamed:imageName];
+	viewController.arcTabItem = [[KYArcTabItem alloc] initWithTitle:nil image:image selectedImage:nil];
+	
+	return viewController;
 }
 
 - (BOOL)          application:(UIApplication *)application
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+  self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   // Override point for customization after application launch.
-  
-  // Setup root view controller
-  ArcTabViewController * arcTabViewController = [ArcTabViewController alloc];
-  [arcTabViewController initWithTitle:@"KYArcTab"
-                           tabBarSize:(CGSize){kKYTabBarWdith, kKYTabBarHeight}
-                tabBarBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:kKYITabBarBackground]]
-                             itemSize:(CGSize){kKYTabBarItemWidth, kKYTabBarItemHeight}
-                                arrow:[UIImage imageNamed:kKYITabBarArrow]];
+	
+	KYArcTabViewController *arcTabViewController = [[KYArcTabViewController alloc] init];
+	arcTabViewController.swipeEnagled = YES;
+	
+	NSArray *viewControllers = @[
+								 [self viewControllerWithBackgroundColor:[UIColor blackColor] tabItemImageIndex:1],
+								 [self viewControllerWithBackgroundColor:[UIColor redColor] tabItemImageIndex:2],
+								 [self viewControllerWithBackgroundColor:[UIColor greenColor] tabItemImageIndex:3],
+								 [self viewControllerWithBackgroundColor:[UIColor blueColor] tabItemImageIndex:4],
+								 ];
+	
+	UIViewController *topViewController = viewControllers[0];
+	
+	// Add a gesture signal on the first view
+	UIImage * gestureImage = [UIImage imageNamed:@"KYIArcTabGestureHelp.png"];
+	UIImageView * gestureImageView = [[UIImageView alloc] initWithImage:gestureImage];
+	[gestureImageView setUserInteractionEnabled:YES];
+	
+	[topViewController.view addSubview:gestureImageView];
+	
+	gestureImageView.center = topViewController.view.center;
+	gestureImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	
+	
+	arcTabViewController.viewControllers = viewControllers;
+	
   [self.window setRootViewController:arcTabViewController];
-  [arcTabViewController release];
   
   [self.window makeKeyAndVisible];
   [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];

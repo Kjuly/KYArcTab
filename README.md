@@ -7,15 +7,14 @@ Arcuated tab view controller with toggleing animation, 2 ~ 4 tabs are enabled. W
 
 # Usage
 
-Subclass `KYArcTabViewController` and override the `-setup` message to configure the child view controllers.
+Create `KYArcTabViewController` instance, then set content viewControllers
 
-Then use the designated initializer below to initialize the tab view controller when you need:
+	KYArcTabViewController *arcTabViewController = [[KYArcTabViewController alloc] init];
+	arcTabViewController.viewControllers = viewControllers;
 
-    - (id)  initWithTitle:(NSString *)title                // title
-               tabBarSize:(CGSize)tabBarSize               // size of tab bar
-    tabBarBackgroundColor:(UIColor *)tabBarBackgroundColor // background color of tab bar
-                 itemSize:(CGSize)itemSize                 // size of items on tab bar
-                    arrow:(UIImage *)arrow;                // arrow on the tab bar
+Set arcTabItem to set the tab icon
+
+	contentViewController.arcTabItem = [[KYArcTabItem alloc] initWithTitle:nil image:image selectedImage:nil];
 
 ---
 # License
