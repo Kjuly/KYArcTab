@@ -172,24 +172,21 @@
 	CGFloat height = self.frame.size.height;
 	CGFloat width = self.frame.size.width;
 	CGFloat radius = height + ((width * width) / (4 * height));
-		
-// FixMe:
-	CGContextBeginPath(context);
-	CGContextMoveToPoint(context, 0, height);
-	CGContextAddArc(context, width / 2.0f, radius + 2, radius, 0, 2 * M_PI, 1);
-	CGContextClosePath(context);
+	CGFloat diameter = radius * 2.0f;
+	CGFloat lineWidth = 4.0f;
 	
 	CGContextSetFillColorWithColor(context, [UIColor colorWithWhite:0.1f alpha:1.0f].CGColor);
-	CGContextFillPath(context);
-	
-	CGContextBeginPath(context);
-	CGContextMoveToPoint(context, 0, height);
-	CGContextAddArc(context, width / 2.0f, radius + 2, radius, 0, 2 * M_PI, 1);
-	CGContextClosePath(context);
 
-	CGContextSetLineWidth(context, 4.0f);
+	CGRect ellipseRect = CGRectZero;
+	ellipseRect.origin.x = (width / 2.0f) - radius;
+	ellipseRect.origin.y = lineWidth / 2.0f;
+	ellipseRect.size = CGSizeMake(diameter, diameter);
+	
+	CGContextFillEllipseInRect(context, ellipseRect);
+	
+	CGContextSetLineWidth(context, lineWidth);
 	CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
-	CGContextStrokePath(context);
+	CGContextStrokeEllipseInRect(context, ellipseRect);
 }
 
 #pragma mark - Legacy
